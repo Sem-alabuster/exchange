@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Заявка — CryptoEx</title>
+  <link rel="icon" href="logo.svg" />
+  <style>
+    :root{--teal:#0f8f8a;--bg:#f6f8f9;--card:#fff;--text:#0b1b20;--muted:#7a8a93;--border:#e8eef0;}
+    *{box-sizing:border-box;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+    body{margin:0;background:var(--bg);color:var(--text);}
+    a{text-decoration:none;color:inherit}
+    /* header */
+    .top{background:#fff;border-bottom:1px solid var(--border);}
+    .container{max-width:1180px;margin:0 auto;padding:0 18px;}
+    .nav{display:flex;align-items:center;justify-content:space-between;height:74px;}
+    .logo{display:flex;align-items:center;gap:10px;}
+    .logo img{height:28px;width:auto;}
+    .menu{display:flex;gap:26px;align-items:center;color:#1f2e35;font-size:14px;}
+    .menu a{opacity:.95}
+    .menu a:hover{opacity:1}
+    .right{display:flex;align-items:center;gap:10px;}
+    .iconbtn{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .pill{border:1px solid var(--border);border-radius:999px;padding:7px 10px;font-size:13px;display:flex;gap:6px;align-items:center}
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--teal)}
+
+    /* page */
+    .wrap{padding:36px 0 70px;}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:26px;box-shadow:0 18px 45px rgba(16,24,40,.06);overflow:hidden}
+    .headrow{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:0;border-bottom:1px solid var(--border);}
+    .hcell{padding:22px 26px;}
+    .h-title{font-size:28px;font-weight:800;line-height:1.1;}
+    .h-sub{color:var(--muted);font-size:13px;margin-top:6px}
+    .pair{display:flex;align-items:center;gap:10px}
+    .badge{width:28px;height:28px;border-radius:999px;background:#e8f5f4;color:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:800}
+    .pair .pname{font-weight:700}
+    .pair .pamt{color:var(--muted);font-size:12px}
+    .rightmeta{text-align:right;color:var(--muted);font-size:13px}
+
+    .body{display:grid;grid-template-columns:1fr;gap:28px;align-items:start;justify-items:center;}
+    .qrbox{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;}
+    .qrtitle{font-weight:700;margin-bottom:10px}
+    .qrimg{width:100%;aspect-ratio:1/1;border-radius:14px;border:1px dashed #ccd8dd;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .qrimg img{width:100%;height:100%;object-fit:cover}
+
+    .mainbox{width:100%;max-width:460px;}
+    .mainh{font-size:22px;font-weight:800;margin:0 0 8px}
+    .maindesc{color:var(--muted);font-size:13px;line-height:1.45;margin:0 0 14px}
+    .addrrow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .addrrow .input{flex:1;min-width:250px;height:44px;border:1px solid #d6e6e7;border-radius:12px;padding:0 12px;background:#f7fbfb}
+    .copybtn{height:44px;border:1px solid #d6e6e7;border-radius:12px;background:#fff;padding:0 14px;cursor:pointer;font-weight:700;color:var(--teal)}
+    .btnrow{display:flex;gap:14px;align-items:center;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+    .btn{height:44px;border-radius:999px;border:1px solid var(--teal);padding:0 18px;font-weight:800;cursor:pointer}
+    .btn.primary{background:var(--teal);color:#fff}
+    .btn.ghost{background:#fff;color:var(--teal)}
+
+    .note{margin-top:16px;background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;color:#2a3c44;font-size:13px;line-height:1.45}
+    .note .warn{color:#d54a4a;font-weight:800}
+
+    .tgbtn{display:inline-flex;align-items:center;gap:10px;border-radius:999px;border:1px solid #d6e6e7;background:#e8f5f4;padding:10px 14px;font-weight:800;color:#0b1b20;margin-top:10px}
+    .tgicon{width:28px;height:28px;border-radius:999px;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900}
+
+    /* paid state */
+    .paid{display:flex;align-items:center;gap:22px;justify-content:center;min-height:220px;text-align:left}
+    .paid .icon{width:150px;height:150px;border-radius:24px;border:1px solid #eadbb2;background:#fff7e6;display:flex;align-items:center;justify-content:center}
+    .paid .icon svg{width:92px;height:92px;opacity:.9}
+    .paid h2{margin:0 0 8px;font-size:26px}
+    .paid p{margin:0;color:var(--muted)}
+
+    /* modal */
+    .overlay{position:fixed;inset:0;background:rgba(11,27,32,.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:50}
+    .modal{background:#fff;border-radius:22px;max-width:520px;width:100%;border:1px solid var(--border);box-shadow:0 30px 90px rgba(16,24,40,.25);padding:18px}
+    .modal h3{margin:0 0 10px;font-size:18px}
+    .modal p{margin:0 0 14px;color:#314750;line-height:1.45}
+    .mrow{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+
+    /* responsive */
+    @media (max-width: 980px){
+      .headrow{grid-template-columns:1fr;}
+      .rightmeta{text-align:left}
+      .body{display:grid;grid-template-columns:1fr;gap:28px;align-items:start;justify-items:center;}
+    .network{color:#d32f2f;font-weight:700;}
+
+  </style>
+</head>
+<body>
+  <div class="top">
+    <div class="container">
+      <div class="nav">
+        <a class="logo" href="index.html"><img src="logo.svg" alt="CryptoEx" /></a>
+        <div class="menu">
+          <a href="rules.html#rules">Правила</a>
+          <a href="rules.html#aml">AML/KYC</a>
+          <a href="partners.html">Партнерам</a>
+          <a href="reviews.html">Отзывы</a>
+          <a href="about.html">О нас</a>
+        </div>
+        <div class="right">
+          <a class="iconbtn" href="account.html" title="Личный кабинет">👤</a>
+          <a class="iconbtn" href="https://t.me/cryptoEXsupport" target="_blank" rel="noopener" title="Telegram">✈️</a>
+          <div class="pill"><span class="dot"></span>RU</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="container">
+      <div class="card">
+        <div class="headrow">
+          <div class="hcell">
+            <div class="h-title" id="reqTitle">Заявка #G00000</div>
+            <div class="h-sub" id="reqTime">Время создания: —</div>
+          </div>
+          <div class="hcell">
+            <div class="pair">
+              <div class="badge" id="giveBadge">T</div>
+              <div>
+                <div class="pname" id="giveName">Tether TRC20</div>
+                <div class="pamt" id="giveAmt">0 USDT</div>
+              </div>
+              <div style="margin-left:10px;opacity:.7">⇄</div>
+              <div>
+                <div class="pname" id="getName">Сбербанк</div>
+                <div class="pamt" id="getAmt">0 RUB</div>
+              </div>
+            </div>
+          </div>
+          <div class="hcell">
+            <div class="rightmeta">
+              <div>Курс обмена: <span id="rateText">—</span></div>
+              <div>Комиссия ОП: <span id="feeText">0.53%</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="body"><div class="mainbox" id="stateNew">
+            <h1 class="mainh">Новая заявка</h1>
+            <p class="maindesc">Переведите указанную в Вашей заявке сумму на предоставленные реквизиты.</p>
+            <div class="netLine">Монета: <span id="coinLabel" class="coinName"></span></div>
+            <div class="netLine">Сеть перевода: <span id="networkLabel" class="network"></span></div>
+            <div class="addrrow">
+              <input class="input" id="walletAddr" readonly value="" />
+              <button class="copybtn" id="copyAddr">Скопировать</button>
+            </div>
+            <div class="btnrow">
+              <button class="btn primary" id="paidBtn">Оплата совершена</button>
+              <button class="btn ghost" id="cancelBtn">Отменить заявку</button>
+            </div>
+          </div>
+
+          <div class="mainbox" id="statePaid" style="display:none;">
+            <div class="paid">
+              <div class="icon" aria-hidden="true">
+                <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 18c2-8 9-14 18-14 10 0 18 8 18 18 0 15-18 34-18 34S16 37 16 22c0-1.5.1-2.8.3-4" stroke="#b48a2c" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M28 24c0-4 3-7 7-7 4.5 0 7 2.5 7 6 0 4-3 6-7 6h-2" stroke="#b48a2c" stroke-width="3" stroke-linecap="round"/>
+                  <path d="M30 39h10" stroke="#b48a2c" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <h2>Вы подтвердили оплату</h2>
+                <p>Подтверждение оплаты принято.<br/>Ожидаем поступления перевода.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="container" style="padding:0 26px 26px;">
+          <div class="note" id="bottomNote">
+            <div style="margin-bottom:8px;">
+              Данная операция производится оператором в ручном режиме и занимает от 5 до 120 минут.<br/>
+              Время для отправки криптовалюты составляет 15 минут, после этого времени заявка считается не актуальной и необходимо создать новую.
+            </div>
+            <div style="display:flex;gap:10px;align-items:flex-start;">
+              <div class="tgicon" style="background:#0f8f8a">!</div>
+              <div>
+                <div><span class="warn">Внимание!</span> Будет проведена проверка Вашей транзакции согласно Политики AML обменного пункта.</div>
+                <div style="margin-top:10px">Если средства не поступили на ваш счет — обратитесь в поддержку.</div>
+                <a class="tgbtn" href="https://t.me/cryptoEXsupport" target="_blank" rel="noopener" id="tgSupport">
+                  <span class="tgicon">✈</span>
+                  Telegram
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="cancelOverlay" role="dialog" aria-modal="true" aria-labelledby="cancelTitle">
+    <div class="modal">
+      <h3 id="cancelTitle">Вы уверены что хотите отменить сделку?</h3>
+      <p>Не нажимайте <b>«Подтверждаю»</b>, если вы уже перевели средства.</p>
+      <div class="mrow">
+        <button class="btn ghost" id="cancelClose">Отменить</button>
+        <button class="btn primary" id="cancelConfirm">Подтверждаю</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function pad(n){return String(n).padStart(5,'0');}
+    function genId(){return 'G' + pad(Math.floor(Math.random()*90000 + 10000));}
+    function fmtDate(d){
+      const dd = String(d.getDate()).padStart(2,'0');
+      const mm = String(d.getMonth()+1).padStart(2,'0');
+      const yy = d.getFullYear();
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mi = String(d.getMinutes()).padStart(2,'0');
+      return `${dd}.${mm}.${yy}, ${hh}:${mi}`;
+    }
+
+    function getDraft(){
+      try{
+        const raw = localStorage.getItem('cryptoex_last_request');
+        if(!raw) return null;
+        return JSON.parse(raw);
+      }catch(e){return null;}
+    }
+
+    function ensureDraft(){
+      let d = getDraft();
+      if(!d){
+        const now = new Date();
+        d = {
+          id: genId(),
+          createdAt: now.toISOString(),
+          rateText: '1 USDT = 79.68607 RUB',
+          give: {name:'Tether TRC20', badge:'T', amount:0, unit:'USDT', code:'USDTTRC20'},
+          get: {name:'Сбербанк', amount:0, unit:'RUB', code:'SBER'},
+          network: 'TRON',
+          address: '',
+        };
+        localStorage.setItem('cryptoex_last_request', JSON.stringify(d));
+      }
+      if(!d.id) d.id = genId();
+      return d;
+    }
+
+    function setUI(d){
+      document.getElementById('reqTitle').textContent = `Заявка #${d.id}`;
+      const dt = d.createdAt ? new Date(d.createdAt) : new Date();
+      document.getElementById('reqTime').textContent = `Время создания: ${fmtDate(dt)} МСК`;
+
+      document.getElementById('giveBadge').textContent = d.give?.badge || 'T';
+      document.getElementById('giveName').textContent = d.give?.name || '';
+      document.getElementById('giveAmt').textContent = `${d.give?.amount ?? 0} ${d.give?.unit || ''}`.trim();
+
+      document.getElementById('getName').textContent = d.get?.name || '';
+      document.getElementById('getAmt').textContent = `${d.get?.amount ?? 0} ${d.get?.unit || ''}`.trim();
+
+      document.getElementById('rateText').textContent = d.rateText || '—';
+
+      const addr = d.address || '';
+      document.getElementById('walletAddr').value = addr;
+
+      const net = d.network || "";
+      const netEl = document.getElementById("networkLabel");
+      if(netEl) netEl.textContent = net;
+    }
+
+    const draft = ensureDraft();
+    setUI(draft);
+
+    // copy
+    document.getElementById('copyAddr').addEventListener('click', async () => {
+      const val = document.getElementById('walletAddr').value || '';
+      try{ await navigator.clipboard.writeText(val); }catch(e){
+        const inp = document.getElementById('walletAddr');
+        inp.select(); document.execCommand('copy');
+        window.getSelection().removeAllRanges();
+      }
+    });
+
+    // cancel modal
+    const overlay = document.getElementById('cancelOverlay');
+    const closeOverlay = () => overlay.style.display = 'none';
+    document.getElementById('cancelBtn').addEventListener('click', () => overlay.style.display='flex');
+    document.getElementById('cancelClose').addEventListener('click', closeOverlay);
+    overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeOverlay(); });
+
+    document.getElementById('cancelConfirm').addEventListener('click', () => {
+      closeOverlay();
+      // mark as canceled + show simple state
+      document.getElementById('stateNew').innerHTML = `
+        <h1 class="mainh">Заявка отменена</h1>
+        <p class="maindesc">Заявка закрыта. Вы можете создать новую заявку на главной странице.</p>
+        <div class="btnrow" style="justify-content:flex-start;">
+          <button class="btn primary" onclick="location.href='index.html'">На главную</button>
+        </div>
+      `;
+      document.getElementById('statePaid').style.display = 'none';
+    });
+
+    // paid
+    document.getElementById('paidBtn').addEventListener('click', () => {
+      document.getElementById('stateNew').style.display='none';
+      document.getElementById('statePaid').style.display='block';
+    });
+
+    // telegram placeholders
+    document.querySelectorAll('a[href="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{ e.preventDefault(); });
+    });
+  </script>
+</body>
+</html>

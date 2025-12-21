@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CryptoEx — Отзывы</title>
+  <style>
+    :root{
+      --bg:#f7f9fb; --card:#fff; --muted:#8b98a5; --text:#12212a; --line:#e9eef3;
+      --teal:#0a8f8a; --pill:#d7f1f0; --shadow:0 18px 40px rgba(16,41,53,.10); --radius:28px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 18px}
+
+    .topbar{background:#fff;border-bottom:1px solid var(--line)}
+    .topbar-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .brand img{height:54px;width:auto;display:block}
+    .nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;flex:1;color:#2b3a42;font-size:14px}
+    .nav .work{color:#c59a57;font-weight:600;margin-right:10px;white-space:nowrap}
+    .hdr-actions{display:flex;align-items:center;gap:10px;min-width:220px;justify-content:flex-end}
+    .iconbtn{width:34px;height:34px;border:1px solid var(--line);border-radius:999px;background:#fff;display:grid;place-items:center;cursor:pointer}
+    .lang{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:600;font-size:13px}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--teal)}
+
+    .page{padding:48px 0 70px;}
+    h1{font-size:44px; margin:0 0 26px;}
+    .reviews-grid{display:grid; grid-template-columns: 1.2fr .8fr; gap:26px; align-items:start;}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px; border:1px solid var(--line);}
+    .list-card{padding:0; overflow:hidden;}
+    .list-inner{padding:18px;}
+    .review{background:#fff; border:1px solid #eef2f6; border-radius:18px; padding:18px 18px; margin-bottom:14px;}
+    .review-top{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px;}
+    .review-name{font-weight:900;}
+    .review-date{color:#97a6b3; font-weight:700; font-size:12px;}
+    .review-text{color:#2b3a42; line-height:1.4; font-weight:600;}
+    .form-card h2{margin:0 0 18px; font-size:20px; font-weight:900; text-align:center;}
+    .field{width:100%;background:#f3f6f9;border:1px solid var(--line);border-radius:12px;padding:12px 12px;margin:10px 0;font-size:13.5px;outline:none}
+    textarea.field{min-height:120px; resize:none;}
+    .btn{width:100%;background:var(--teal);border:none;color:#fff;border-radius:999px;padding:16px 18px;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 14px 30px rgba(10,143,138,.22)}
+    .btn:disabled{opacity:.55; cursor:not-allowed; box-shadow:none;}
+    .pager{display:flex; align-items:center; gap:8px; justify-content:center; margin-top:18px;}
+    .pbtn{width:30px; height:30px; border-radius:999px; border:1px solid #dce5ec; background:#fff; cursor:pointer; display:grid; place-items:center; font-weight:900; color:#63727e;}
+    .pnum{min-width:26px; height:26px; border-radius:999px; border:0; background:transparent; cursor:pointer; font-weight:800; color:#9aa7b3;}
+    .pnum.active{color:var(--teal);}
+    .pbtn:hover{background:#f6faf9}
+    .pnum:hover{color:#2b3a42}
+    .err{display:none; background:#fff1f0; border:1px solid #ffd6d3; color:#8a1f17; padding:10px 12px; border-radius:14px; font-weight:800; margin-top:8px;}
+    @media (max-width: 980px){
+      .reviews-grid{grid-template-columns:1fr;}
+      .brand{min-width:auto}
+      .hdr-actions{min-width:auto}
+      .nav{justify-content:flex-start}
+    }
+
+    /* auth-dropdown */
+    .user-menu{ position:relative; }
+    .dropdown{
+      position:absolute; right:0; top:42px;
+      min-width:180px;
+      background:#fff; border:1px solid var(--line);
+      border-radius:14px; box-shadow:var(--shadow);
+      padding:8px; display:flex; flex-direction:column; gap:6px;
+      z-index:1000;
+    }
+  .dropdown[hidden]{ display:none !important; }
+
+    .ditem{
+      display:block;
+      padding:10px 12px;
+      border-radius:10px;
+      color:var(--text);
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+    }
+    .ditem:hover{ background:#f4f6f8; }
+    .ditem.danger{ color:#b42318; background:transparent; border:0; text-align:left; cursor:pointer; width:100%; }
+    .ditem.danger:hover{ background:#fff1f0; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html">
+          <img alt="CryptoEx" src="./logo.svg" onerror="this.style.display='none';"/>
+        </a>
+        <div class="nav">
+          <span class="work">Работаем 24/7</span>
+          <a href="./rules.html">Правила</a>
+          <a href="./rules.html#aml">AML/KYC</a>
+          <a href="./partners.html">Партнерам</a>
+          <a href="./reviews.html">Отзывы</a>
+          <a href="./about.html">О нас</a>
+        </div>
+        <div class="hdr-actions">
+          <div class="user-menu">
+            <button class="iconbtn" id="userMenuBtn" title="Профиль" aria-label="Профиль">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 12a4.2 4.2 0 1 0 0-8.4A4.2 4.2 0 0 0 12 12Z" stroke="#c59a57" stroke-width="2"/>
+                <path d="M4 20.2c1.9-4 5.1-6 8-6s6.1 2 8 6" stroke="#c59a57" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="dropdown" id="userMenu" hidden>
+              <div id="userMenuLoggedOut">
+                <a class="ditem" href="./login.html">Войти</a>
+                <a class="ditem" href="./register.html">Регистрация</a>
+              </div>
+              <div id="userMenuLoggedIn" style="display:none">
+                <a class="ditem" href="./account.html">Личный кабинет</a>
+                <button class="ditem danger" type="button" id="logoutBtn">Выйти</button>
+              </div>
+            </div>
+          </div>
+
+          <a class="iconbtn" href="https://t.me/cryptoEXsupport" target="_blank" rel="noopener" title="Telegram" aria-label="Telegram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M22 4 2.9 11.3c-.8.3-.8 1.4 0 1.7l4.6 1.6 1.7 5.3c.2.8 1.2 1 1.7.4l2.7-3 5.2 3.8c.6.4 1.4.1 1.6-.6L23 5.6c.2-.9-.6-1.6-1.5-1.3Z" stroke="#0a8f8a" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="lang"><span class="dot"></span>RU</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="container">
+      <h1>Отзывы</h1>
+
+      <div class="reviews-grid">
+        <div class="card list-card">
+          <div class="list-inner" id="reviewsContainer"></div>
+          <div class="pager" id="pager"></div>
+        </div>
+
+        <div class="card form-card">
+          <h2>Оставь свой отзыв о нашей работе</h2>
+          <input class="field" id="rName" placeholder="Имя" />
+          <input class="field" id="rEmail" placeholder="Email" />
+          <textarea class="field" id="rText" placeholder="Отзыв"></textarea>
+          <button class="btn" id="sendBtn" disabled>Отправить</button>
+          <div class="err" id="formErr">Введите корректный email, например name@gmail.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./auth.js"></script>
+  <script>
+    const REVIEWS = [{"name": "Анжелика", "date": "01.09.2023, 08:30", "text": "Всё прошло быстро и честно, курс как на странице. Спасибо! Топ."}, {"name": "Елена", "date": "10.09.2023, 11:41", "text": "Обмен занял пару минут, поддержка отвечает оперативно."}, {"name": "Яна", "date": "19.09.2023, 14:52", "text": "Удобный интерфейс, без лишних шагов. Рекомендую. Без нервов :)"}, {"name": "Оксана", "date": "28.09.2023, 18:03", "text": "Курс фиксируется, всё прозрачно. Буду пользоваться ещё."}, {"name": "Мария", "date": "07.10.2023, 09:14", "text": "Перевод прошёл успешно, данные проверили быстро. Топ."}, {"name": "Андрей", "date": "06.10.2023, 12:25", "text": "Отличный сервис — быстро, понятно и без скрытых комиссий."}, {"name": "Сергей", "date": "15.10.2023, 14:36", "text": "Понравилось, что всё по шагам и видно итоговую сумму. Супер!"}, {"name": "Дмитрий", "date": "24.10.2023, 17:47", "text": "Сработало с первого раза, никаких проблем не возникло."}, {"name": "Алексей", "date": "02.11.2023, 08:58", "text": "Удобно, что есть уведомление и статус заявки. Пользуюсь регулярно."}, {"name": "Никита", "date": "11.11.2023, 12:09", "text": "Хороший обменник: скорость и поддержка на уровне."}, {"name": "Кирилл", "date": "10.11.2023, 15:20", "text": "Всё прошло быстро и честно, курс как на странице. Спасибо! Топ."}, {"name": "Виктория", "date": "19.11.2023, 17:31", "text": "Обмен занял пару минут, поддержка отвечает оперативно."}, {"name": "Дарья", "date": "28.11.2023, 08:42", "text": "Удобный интерфейс, без лишних шагов. Рекомендую. Супер!"}, {"name": "Ксения", "date": "07.12.2023, 11:53", "text": "Курс фиксируется, всё прозрачно. Буду пользоваться ещё."}, {"name": "Алина", "date": "16.12.2023, 15:04", "text": "Перевод прошёл успешно, данные проверили быстро. Сохранил в закладки."}, {"name": "Ирина", "date": "15.12.2023, 18:15", "text": "Отличный сервис — быстро, понятно и без скрытых комиссий."}, {"name": "Павел", "date": "24.12.2023, 09:26", "text": "Понравилось, что всё по шагам и видно итоговую сумму. Супер!"}, {"name": "Владимир", "date": "02.01.2024, 11:37", "text": "Сработало с первого раза, никаких проблем не возникло."}, {"name": "Роман", "date": "11.01.2024, 14:48", "text": "Удобно, что есть уведомление и статус заявки. Пользуюсь регулярно."}, {"name": "Екатерина", "date": "20.01.2024, 17:59", "text": "Хороший обменник: скорость и поддержка на уровне."}, {"name": "Наталья", "date": "19.01.2024, 09:10", "text": "Всё прошло быстро и честно, курс как на странице. Спасибо! Всё чётко."}, {"name": "Артём", "date": "28.01.2024, 12:21", "text": "Обмен занял пару минут, поддержка отвечает оперативно."}, {"name": "Глеб", "date": "06.02.2024, 14:32", "text": "Удобный интерфейс, без лишних шагов. Рекомендую. Супер!"}, {"name": "Тимур", "date": "15.02.2024, 17:43", "text": "Курс фиксируется, всё прозрачно. Буду пользоваться ещё."}, {"name": "Руслан", "date": "24.02.2024, 08:54", "text": "Перевод прошёл успешно, данные проверили быстро. Пользуюсь регулярно."}, {"name": "Светлана", "date": "23.02.2024, 12:05", "text": "Отличный сервис — быстро, понятно и без скрытых комиссий."}, {"name": "Полина", "date": "03.03.2024, 15:16", "text": "Понравилось, что всё по шагам и видно итоговую сумму. Пользуюсь регулярно."}, {"name": "София", "date": "12.03.2024, 18:27", "text": "Сработало с первого раза, никаких проблем не возникло."}, {"name": "Юлия", "date": "21.03.2024, 08:38", "text": "Удобно, что есть уведомление и статус заявки. Без нервов :)"}, {"name": "Валерия", "date": "30.03.2024, 11:49", "text": "Хороший обменник: скорость и поддержка на уровне."}, {"name": "Максим", "date": "29.03.2024, 15:00", "text": "Всё прошло быстро и честно, курс как на странице. Спасибо! Пользуюсь регулярно."}, {"name": "Илья", "date": "07.04.2024, 18:11", "text": "Обмен занял пару минут, поддержка отвечает оперативно."}, {"name": "Константин", "date": "16.04.2024, 09:22", "text": "Удобный интерфейс, без лишних шагов. Рекомендую. Пользуюсь регулярно."}, {"name": "Олег", "date": "25.04.2024, 11:33", "text": "Курс фиксируется, всё прозрачно. Буду пользоваться ещё."}, {"name": "Станислав", "date": "04.05.2024, 14:44", "text": "Перевод прошёл успешно, данные проверили быстро. Сохранил в закладки."}, {"name": "Инна", "date": "03.05.2024, 17:55", "text": "Отличный сервис — быстро, понятно и без скрытых комиссий."}, {"name": "Татьяна", "date": "12.05.2024, 09:06", "text": "Понравилось, что всё по шагам и видно итоговую сумму. Всё чётко."}, {"name": "Людмила", "date": "21.05.2024, 12:17", "text": "Сработало с первого раза, никаких проблем не возникло."}, {"name": "Вероника", "date": "30.05.2024, 15:28", "text": "Удобно, что есть уведомление и статус заявки. Без нервов :)"}, {"name": "Злата", "date": "08.06.2024, 17:39", "text": "Хороший обменник: скорость и поддержка на уровне."}, {"name": "Михаил", "date": "07.06.2024, 08:50", "text": "Всё прошло быстро и честно, курс как на странице. Спасибо! Супер!"}, {"name": "Фёдор", "date": "16.06.2024, 12:01", "text": "Обмен занял пару минут, поддержка отвечает оперативно."}, {"name": "Борис", "date": "25.06.2024, 15:12", "text": "Удобный интерфейс, без лишних шагов. Рекомендую. Сохранил в закладки."}, {"name": "Григорий", "date": "04.07.2024, 18:23", "text": "Курс фиксируется, всё прозрачно. Буду пользоваться ещё."}, {"name": "Вадим", "date": "13.07.2024, 08:34", "text": "Перевод прошёл успешно, данные проверили быстро. Пользуюсь регулярно."}, {"name": "Эдуард", "date": "12.07.2024, 11:45", "text": "Отличный сервис — быстро, понятно и без скрытых комиссий."}, {"name": "Лев", "date": "21.07.2024, 14:56", "text": "Понравилось, что всё по шагам и видно итоговую сумму. Пользуюсь регулярно."}, {"name": "Георгий", "date": "30.07.2024, 18:07", "text": "Сработало с первого раза, никаких проблем не возникло."}, {"name": "Камилла", "date": "08.08.2024, 09:18", "text": "Удобно, что есть уведомление и статус заявки. Всё чётко."}, {"name": "Надежда", "date": "17.08.2024, 12:29", "text": "Хороший обменник: скорость и поддержка на уровне."}];
+    const perPage = 5;
+    const totalPages = 10;
+
+    function el(tag, cls, html){
+      const e = document.createElement(tag);
+      if(cls) e.className = cls;
+      if(html !== undefined) e.innerHTML = html;
+      return e;
+    }
+
+    function renderPage(page){
+      const p = Math.min(Math.max(1, page), totalPages);
+      const start = (p-1) * perPage;
+      const list = REVIEWS.slice(start, start + perPage);
+
+      const box = document.getElementById("reviewsContainer");
+      box.innerHTML = "";
+      list.forEach(r => {
+        const card = el("div","review");
+        card.innerHTML = `
+          <div class="review-top">
+            <div class="review-name">${r.name}</div>
+            <div class="review-date">${r.date}</div>
+          </div>
+          <div class="review-text">${r.text}</div>
+        `;
+        box.appendChild(card);
+      });
+
+      const pager = document.getElementById("pager");
+      pager.innerHTML = "";
+
+      const prev = el("button","pbtn","‹");
+      prev.onclick = () => renderPage(p-1);
+      pager.appendChild(prev);
+
+      for(let i=1;i<=totalPages;i++) {
+        const b = el("button","pnum"+(i===p?" active":""), String(i));
+        b.onclick = () => renderPage(i);
+        pager.appendChild(b);
+      }
+
+      const next = el("button","pbtn","›");
+      next.onclick = () => renderPage(p+1);
+      pager.appendChild(next);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderPage(1);
+
+      // form validation
+      const emailEl = document.getElementById("rEmail");
+      const btn = document.getElementById("sendBtn");
+      const err = document.getElementById("formErr");
+
+      function check(){
+        const ok = CryptoExAuth.isValidEmail(emailEl.value.trim());
+        btn.disabled = !ok;
+        err.style.display = (!ok && emailEl.value.trim().length>0) ? "block" : "none";
+      }
+      emailEl.addEventListener("input", check);
+
+      btn.addEventListener("click", () => {
+        if(btn.disabled) return;
+        // Just show notification (we don't store it)
+        document.getElementById("rName").value = "";
+        document.getElementById("rEmail").value = "";
+        document.getElementById("rText").value = "";
+        btn.disabled = true;
+        err.style.display = "none";
+        CryptoExAuth.toast("Отзыв отправлен");
+      });
+    });
+  </script>
+</body>
+</html>

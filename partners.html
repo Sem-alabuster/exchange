@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>CryptoEx — Партнерам</title>
+  <style>
+
+    :root{
+      --bg:#f7f9fb; --card:#fff; --muted:#8b98a5; --text:#12212a; --line:#e9eef3;
+      --teal:#0a8f8a; --pill:#d7f1f0; --shadow:0 18px 40px rgba(16,41,53,.10); --radius:28px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 18px}
+
+    .topbar{background:#fff;border-bottom:1px solid var(--line)}
+    .topbar-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .brand img{height:54px;width:auto;display:block}
+    .nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;flex:1;color:#2b3a42;font-size:14px}
+    .nav .work{color:#c59a57;font-weight:600;margin-right:10px;white-space:nowrap}
+    .hdr-actions{display:flex;align-items:center;gap:10px;min-width:220px;justify-content:flex-end}
+    .iconbtn{width:34px;height:34px;border:1px solid var(--line);border-radius:999px;background:#fff;display:grid;place-items:center}
+    .lang{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:600;font-size:13px}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--teal)}
+
+    .banner{margin:18px auto 22px;background:var(--teal);color:#fff;padding:16px 18px;border-radius:8px;font-weight:600;box-shadow:0 10px 24px rgba(10,143,138,.18)}
+    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;align-items:start;margin-bottom:26px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 16px;position:relative;overflow:hidden;min-height:660px}
+    .card h2{margin:4px 0 14px;font-size:24px;font-weight:800;letter-spacing:-.2px}
+
+    .amount-row{display:flex;align-items:center;gap:10px;background:#f3f6f9;border-radius:10px;border:1px solid var(--line);padding:10px 12px;margin-bottom:10px}
+    .amount-row input{border:none;background:transparent;outline:none;flex:1;font-size:13.5px;color:#2b3a42}
+    .amount-suffix{display:flex;align-items:center;gap:8px;color:#7f8b96;font-size:12.5px;font-weight:700}
+    .amount-suffix .mini-badge{width:18px;height:18px;border-radius:6px;background:#e8f7f6;display:grid;place-items:center;color:var(--teal);font-size:12px;font-weight:900}
+
+    .amount-hint{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;color:#7f8b96;font-size:12px}
+    .amount-hint b{color:#2b3a42}
+    .amount-hint .right{font-weight:700}
+
+    .tabs{display:flex;gap:14px;margin:12px 0 8px;font-size:13px;color:#83909b}
+    .tab{padding:8px 0;position:relative;cursor:pointer}
+    .tab.active{color:var(--teal);font-weight:700}
+    .tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--teal);border-radius:2px}
+
+    .chips{display:flex;gap:10px;margin:10px 0 12px;flex-wrap:wrap}
+    .chip{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px;color:#70808c;cursor:pointer}
+    .chip.active{border-color:#bfe9e6;background:#f1fbfa;color:#2b3a42;font-weight:600}
+
+    .search{display:flex;align-items:center;gap:10px;background:#f3f6f9;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:14px;color:#7f8b96}
+    .search input{border:none;background:transparent;outline:none;flex:1;font-size:13.5px;color:#2b3a42}
+
+    .section-title{margin:6px 0 10px;color:var(--teal);font-weight:700;font-size:13px}
+    .list{border:1px solid var(--line);border-radius:12px;padding:10px;height:430px;overflow:auto}
+    .item{display:flex;align-items:center;gap:12px;padding:10px 10px;border-radius:12px;cursor:pointer}
+    .item:hover{background:#f6fafc}
+    .item.active{outline:2px solid #bfe9e6;background:#fbfeff}
+    .ico{width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font-weight:800;font-size:12px;color:#fff;line-height:1}
+    .ico.light{color:#2b3a42}
+    .item .name{font-weight:600;font-size:14px}
+    .item .right{margin-left:auto;display:flex;align-items:center;gap:10px;color:#a0acb6;font-size:12px}
+    .check{width:18px;height:18px;border-radius:999px;border:2px solid #cfe7e5;display:grid;place-items:center;color:var(--teal);font-size:12px;font-weight:900}
+    .item.active .check{border-color:var(--teal)}
+
+    .swap-bubble{position:absolute;right:-18px;top:164px;width:36px;height:36px;border-radius:999px;border:1px solid #bfe9e6;background:#f2fbfa;display:grid;place-items:center;box-shadow:0 10px 24px rgba(10,143,138,.12);z-index:5}
+
+    .rate{color:#7b8893;font-size:12.5px;margin:2px 0 10px}
+    .pair{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:12px}
+    .pair .side{display:flex;align-items:center;gap:10px;min-width:0}
+    .pair .side .label{font-weight:700;font-size:13px}
+    .rotate{width:30px;height:30px;border-radius:999px;border:1px solid var(--line);display:grid;place-items:center;color:#7b8893;background:#fff}
+    .field{width:100%;background:#f3f6f9;border:1px solid var(--line);border-radius:10px;padding:12px 12px;margin:10px 0;font-size:13.5px;outline:none}
+    .agree{display:flex;align-items:flex-start;gap:10px;color:#8a97a2;font-size:11.5px;line-height:1.35;margin:10px 0 14px}
+    .agree input{width:18px;height:18px;margin-top:1px}
+    .btn{width:100%;background:var(--teal);border:none;color:#fff;border-radius:999px;padding:16px 18px;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:14px;cursor:pointer;box-shadow:0 14px 30px rgba(10,143,138,.22)}
+    .btn:hover{background:#087f7a}
+    .note{margin-top:14px;border:1.5px solid #1e9a47;border-radius:12px;padding:10px 12px;font-size:12px;color:#2b3a42;background:#fff}
+
+    .footer{margin-top:18px;padding:22px 0 34px}
+    .footer-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .pills{display:flex;gap:12px;flex-wrap:wrap}
+    .pill{background:var(--pill);color:#2b3a42;border-radius:999px;padding:10px 16px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:10px}
+    .mini-ico{width:18px;height:18px;border-radius:6px;background:#eaf7f6;display:grid;place-items:center;color:var(--teal);font-weight:900;font-size:12px}
+    .copyright{color:#6f7c87;font-size:13px;white-space:nowrap}
+
+    .support{position:fixed;right:18px;bottom:82px;width:260px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 40px rgba(16,41,53,.14);overflow:hidden}
+    .support-top{display:flex;align-items:center;gap:12px;padding:12px 14px}
+    .support-switch{width:44px;height:24px;border-radius:999px;background:#dfe8ef;position:relative}
+    .support-switch::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--teal)}
+    .support-title{font-weight:700;font-size:13px;color:#2b3a42}
+    .support-brand{margin-left:auto;font-weight:900;color:var(--teal)}
+    .support-brand small{font-weight:800;letter-spacing:.2px}
+
+    @media (max-width:1040px){
+      .grid{grid-template-columns:1fr;gap:18px}
+      .card{min-height:auto}
+      .swap-bubble{display:none}
+      .support{display:none}
+      .brand{min-width:auto}
+      .hdr-actions{min-width:auto}
+      .nav{justify-content:flex-start}
+    }
+  
+
+/* Extra page styles */
+.page{padding:48px 0 70px;}
+.page h1{font-size:44px; margin:0 0 24px;}
+.tabs{display:flex; gap:18px; align-items:center; border-bottom:1px solid #e9eef3; margin:8px 0 28px;}
+.tablink{padding:16px 18px; color:#8b98a5; text-decoration:none; font-weight:700; border-bottom:3px solid transparent;}
+.tablink.active{color:var(--teal); border-bottom-color:var(--teal);}
+
+/* Partners */
+.partners-wrap{max-width:980px; margin:0 auto;}
+.section-title{font-size:34px; margin:0 0 10px;}
+.lead{color:#5b6b78; line-height:1.5; margin:0 0 26px;}
+.reward-card{display:grid; grid-template-columns: 260px 1fr 280px; gap:0; align-items:center; overflow:hidden;}
+.reward-card .col{padding:26px 28px;}
+.reward-card .col + .col{border-left:1px solid #eef2f6;}
+.big-percent{font-size:64px; font-weight:900; color:var(--teal); letter-spacing:-1px;}
+.reward-desc{color:#3b4a57; font-weight:700; line-height:1.35;}
+.reward-btn{display:flex; justify-content:center;}
+.reward-btn .btn{width:100%; max-width:240px;}
+
+/* Reviews */
+.grid-2{display:grid; grid-template-columns: 1fr 420px; gap:32px; align-items:start;}
+@media(max-width: 1020px){ .grid-2{grid-template-columns: 1fr; } }
+.review-card{padding:20px 22px;}
+.review-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:8px;}
+.review-name{font-weight:900; color:#1e2a33;}
+.review-dt{color:#9aa7b4; font-size:12px; white-space:nowrap;}
+.review-text{color:#3b4a57; line-height:1.5;}
+.pager{display:flex; align-items:center; gap:10px; justify-content:center; margin-top:18px;}
+.pager a{width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:999px; color:#8b98a5; text-decoration:none; font-weight:800;}
+.pager a.active{background:rgba(12,151,148,.12); color:var(--teal);}
+.pager .arrow{width:28px; height:28px; border-radius:999px; border:1px solid #e4ebf1; color:#8b98a5;}
+.form-card{padding:22px;}
+.form-card h2{margin:0 0 14px; font-size:20px; text-align:center;}
+.field{margin:14px 0;}
+.field input, .field textarea{width:100%; padding:14px 16px; border-radius:12px; border:1px solid #e4ebf1; background:#f7f9fb; outline:none;}
+.field textarea{min-height:110px; resize:none;}
+.submit-wrap{display:flex; justify-content:center; margin-top:18px;}
+.toast{position:fixed; right:22px; bottom:22px; background:#b9f6a0; color:#163015; padding:14px 16px; border-radius:14px; box-shadow:0 16px 40px rgba(0,0,0,.12); font-weight:800; z-index:9999; opacity:0; transform:translateY(10px); transition:all .25s ease;}
+.toast.show{opacity:1; transform:translateY(0);}
+
+
+
+/* auth-dropdown */
+.user-menu{ position:relative; }
+.dropdown{
+  position:absolute; right:0; top:46px;
+  min-width:180px;
+  background:#fff; border:1px solid var(--line);
+  border-radius:14px; box-shadow:var(--shadow);
+  padding:8px; display:flex; flex-direction:column; gap:6px;
+  z-index:1000;
+}
+  .dropdown[hidden]{ display:none !important; }
+
+.ditem{
+  display:block;
+  padding:10px 12px;
+  border-radius:10px;
+  color:var(--text);
+  text-decoration:none;
+  font-weight:600;
+  font-size:14px;
+}
+.ditem:hover{ background:#f4f6f8; }
+.ditem.danger{ color:#b42318; background:transparent; border:0; text-align:left; cursor:pointer; width:100%; }
+.ditem.danger:hover{ background:#fff1f0; }
+
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html"><img src="./logo.svg" alt="CryptoEx"></a>
+
+        <nav class="nav">
+          <span class="work">Работаем 24/7</span>
+          <a href="./rules.html#rules">Правила</a>
+          <a href="./rules.html#aml">AML/KYC</a>
+          <a href="./partners.html" style="font-weight:900;color:var(--teal)">Партнерам</a>
+          <a href="./reviews.html">Отзывы</a>
+          <a href="./about.html">О нас</a>
+        </nav>
+
+        <div class="hdr-actions">
+          
+          <div class="user-menu">
+            <button class="iconbtn" id="userMenuBtn" title="Профиль" aria-label="Профиль">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M20 21a8 8 0 0 0-16 0" stroke="#8AA0AE" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="#8AA0AE" stroke-width="2"/>
+            </svg>
+            </button>
+            <div class="dropdown" id="userMenu" hidden>
+              <div id="userMenuLoggedOut">
+                <a class="ditem" href="./login.html">Войти</a>
+                <a class="ditem" href="./register.html">Регистрация</a>
+              </div>
+              <div id="userMenuLoggedIn" style="display:none">
+                <a class="ditem" href="./account.html">Личный кабинет</a>
+                <button class="ditem danger" type="button" id="logoutBtn">Выйти</button>
+              </div>
+            </div>
+          </div>
+          <a class="iconbtn" href="https://t.me/cryptoEXsupport" target="_blank" rel="noopener" title="Telegram" aria-label="Telegram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M21.8 4.6 3.7 11.6c-1.2.5-1.2 1.2-.2 1.5l4.6 1.4 1.7 5.1c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-15.5c.3-1.2-.5-1.7-1.1-1.3Z" stroke="#8AA0AE" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="lang" title="Язык"><span class="dot"></span> RU</div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main class="page">
+    <div class="container">
+      <h1>Партнерам</h1>
+
+      <div class="tabs">
+        <a class="tablink active" href="./partners.html">Партнерская программа</a>
+      </div>
+
+      <div class="partners-wrap">
+        <h2 class="section-title">Партнерская программа</h2>
+        <p class="lead">
+          Дорогой клиент. Мы готовы делиться прибылью с вами. Каждый хочет получать деньги, тратя при этом минимум усилий.
+          И мы готовы предоставить вам такую уникальную возможность. Давайте работать вместе!
+        </p>
+
+        <h3 class="section-title" style="font-size:28px;margin-top:22px;">Схема начисления вознаграждений</h3>
+
+        <div class="card reward-card" style="margin-top:18px;">
+          <div class="col" style="text-align:center;">
+            <div class="big-percent">1%</div>
+          </div>
+          <div class="col">
+            <div class="reward-desc">Базовая ставка партнерского начисления<br/>за обмен Ваших рефералов</div>
+          </div>
+          <div class="col reward-btn">
+            <a class="btn" href="./rules.html#contacts">Начать зарабатывать</a>
+          </div>
+        </div>
+
+        <!-- Блок "Индивидуальные условия" убран по ТЗ -->
+      </div>
+    </div>
+  </main>
+
+  <script src="./auth.js"></script>
+</body>
+</html>

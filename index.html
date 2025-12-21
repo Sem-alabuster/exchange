@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CryptoEx — Обмен</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#f7f9fb; --card:#fff; --muted:#8b98a5; --text:#12212a; --line:#e9eef3;
+      --teal:#0a8f8a; --pill:#d7f1f0; --shadow:0 18px 40px rgba(16,41,53,.10); --radius:28px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 18px}
+
+    .topbar{background:#fff;border-bottom:1px solid var(--line)}
+    .topbar-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .brand img{height:54px;width:auto;display:block}
+    .nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;flex:1;color:#2b3a42;font-size:14px}
+    .nav .work{color:#c59a57;font-weight:600;margin-right:10px;white-space:nowrap}
+    .hdr-actions{display:flex;align-items:center;gap:10px;min-width:220px;justify-content:flex-end}
+    .iconbtn{width:34px;height:34px;border:1px solid var(--line);border-radius:999px;background:#fff;display:grid;place-items:center}
+    .lang{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:600;font-size:13px}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--teal)}
+
+    .banner{margin:18px auto 22px;background:var(--teal);color:#fff;padding:16px 18px;border-radius:8px;font-weight:600;box-shadow:0 10px 24px rgba(10,143,138,.18)}
+    .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;align-items:start;margin-bottom:26px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 18px 16px;position:relative;overflow:hidden;min-height:660px}
+    .card h2{margin:4px 0 14px;font-size:24px;font-weight:800;letter-spacing:-.2px}
+
+    .amount-row{display:flex;align-items:center;gap:10px;background:#f3f6f9;border-radius:10px;border:1px solid var(--line);padding:10px 12px;margin-bottom:10px}
+    .amount-row input{border:none;background:transparent;outline:none;flex:1;font-size:13.5px;color:#2b3a42}
+    .amount-suffix{display:flex;align-items:center;gap:8px;color:#7f8b96;font-size:12.5px;font-weight:700}
+    .amount-suffix .mini-badge{width:18px;height:18px;border-radius:6px;background:#e8f7f6;display:grid;place-items:center;color:var(--teal);font-size:12px;font-weight:900}
+
+    .amount-hint{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;color:#7f8b96;font-size:12px}
+    .amount-hint b{color:#2b3a42}
+    .amount-hint .right{font-weight:700}
+
+    .tabs{display:flex;gap:14px;margin:12px 0 8px;font-size:13px;color:#83909b}
+    .tab{padding:8px 0;position:relative;cursor:pointer}
+    .tab.active{color:var(--teal);font-weight:700}
+    .tab.active::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--teal);border-radius:2px}
+
+    .chips{display:flex;gap:10px;margin:10px 0 12px;flex-wrap:wrap}
+    .chip{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:12px;color:#70808c;cursor:pointer}
+    .chip.active{border-color:#bfe9e6;background:#f1fbfa;color:#2b3a42;font-weight:600}
+
+    .search{display:flex;align-items:center;gap:10px;background:#f3f6f9;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:14px;color:#7f8b96}
+    .search input{border:none;background:transparent;outline:none;flex:1;font-size:13.5px;color:#2b3a42}
+
+    .section-title{margin:6px 0 10px;color:var(--teal);font-weight:700;font-size:13px}
+    .list{border:1px solid var(--line);border-radius:12px;padding:10px;height:430px;overflow:auto}
+    .item{display:flex;align-items:center;gap:12px;padding:10px 10px;border-radius:12px;cursor:pointer}
+    .item:hover{background:#f6fafc}
+    .item.active{outline:2px solid #bfe9e6;background:#fbfeff}
+    .ico{width:30px;height:30px;border-radius:999px;display:grid;place-items:center;font-weight:800;font-size:12px;color:#fff;line-height:1;overflow:hidden}
+    .ico.light{color:#2b3a42}
+    /* Small coin logos like competitor UI */
+    .coin-ico-img{width:18px;height:18px;display:block;object-fit:contain}
+    .ico img{max-width:100%;max-height:100%}
+    .item .name{font-weight:600;font-size:14px}
+    .item .right{margin-left:auto;display:flex;align-items:center;gap:10px;color:#a0acb6;font-size:12px}
+    .check{width:18px;height:18px;border-radius:999px;border:2px solid #cfe7e5;display:grid;place-items:center;color:var(--teal);font-size:12px;font-weight:900}
+    .item.active .check{border-color:var(--teal)}
+
+    .swap-bubble{position:absolute;right:-18px;top:164px;width:36px;height:36px;border-radius:999px;border:1px solid #bfe9e6;background:#f2fbfa;display:grid;place-items:center;box-shadow:0 10px 24px rgba(10,143,138,.12);z-index:5}
+
+    .rate{color:#7b8893;font-size:12.5px;margin:2px 0 10px}
+    .pair{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:12px 0;margin-bottom:12px}
+    .pair .side{display:flex;align-items:center;gap:10px;min-width:0}
+    .pair .side .label{font-weight:700;font-size:13px}
+    .rotate{width:30px;height:30px;border-radius:999px;border:1px solid var(--line);display:grid;place-items:center;color:#7b8893;background:#fff}
+    .field{width:100%;background:#f3f6f9;border:1px solid var(--line);border-radius:10px;padding:12px 12px;margin:10px 0;font-size:13.5px;outline:none}
+    .agree{display:flex;align-items:flex-start;gap:10px;color:#8a97a2;font-size:11.5px;line-height:1.35;margin:10px 0 14px}
+    .agree input{width:18px;height:18px;margin-top:1px}
+    .btn{width:100%;background:var(--teal);border:none;color:#fff;border-radius:999px;padding:16px 18px;font-size:16px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:14px;cursor:pointer;box-shadow:0 14px 30px rgba(10,143,138,.22)}
+    .btn:hover{background:#087f7a}
+    .note{margin-top:14px;border:1.5px solid #1e9a47;border-radius:12px;padding:10px 12px;font-size:12px;color:#2b3a42;background:#fff}
+
+    .footer{margin-top:18px;padding:22px 0 34px}
+    .footer-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .pills{display:flex;gap:12px;flex-wrap:wrap}
+    .pill{background:var(--pill);color:#2b3a42;border-radius:999px;padding:10px 16px;font-weight:600;font-size:13px;display:flex;align-items:center;gap:10px}
+    .mini-ico{width:18px;height:18px;border-radius:6px;background:#eaf7f6;display:grid;place-items:center;color:var(--teal);font-weight:900;font-size:12px}
+    .copyright{color:#6f7c87;font-size:13px;white-space:nowrap}
+
+    .support{position:fixed;right:18px;bottom:82px;width:260px;background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 40px rgba(16,41,53,.14);overflow:hidden}
+    .support-top{display:flex;align-items:center;gap:12px;padding:12px 14px}
+    .support-switch{width:44px;height:24px;border-radius:999px;background:#dfe8ef;position:relative}
+    .support-switch::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:var(--teal)}
+    .support-title{font-weight:700;font-size:13px;color:#2b3a42}
+    .support-brand{margin-left:auto;font-weight:900;color:var(--teal)}
+    .support-brand small{font-weight:800;letter-spacing:.2px}
+
+    @media (max-width:1040px){
+      .grid{grid-template-columns:1fr;gap:18px}
+      .card{min-height:auto}
+      .swap-bubble{display:none}
+      .support{display:none}
+      .brand{min-width:auto}
+      .hdr-actions{min-width:auto}
+      .nav{justify-content:flex-start}
+    }
+  
+
+/* auth-dropdown */
+.user-menu{ position:relative; }
+.dropdown{
+  position:absolute; right:0; top:46px;
+  min-width:180px;
+  background:#fff; border:1px solid var(--line);
+  border-radius:14px; box-shadow:var(--shadow);
+  padding:8px; display:flex; flex-direction:column; gap:6px;
+  z-index:1000;
+}
+  .dropdown[hidden]{ display:none !important; }
+
+.ditem{
+  display:block;
+  padding:10px 12px;
+  border-radius:10px;
+  color:var(--text);
+  text-decoration:none;
+  font-weight:600;
+  font-size:14px;
+}
+.ditem:hover{ background:#f4f6f8; }
+.ditem.danger{ color:#b42318; background:transparent; border:0; text-align:left; cursor:pointer; width:100%; }
+.ditem.danger:hover{ background:#fff1f0; }
+
+</style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html"><img src="./logo.svg" alt="CryptoEx"></a>
+
+        <nav class="nav">
+          <span class="work">Работаем 24/7</span>
+          <a href="./rules.html#rules">Правила</a>
+          <a href="./rules.html#aml">AML/KYC</a>
+          <a href="./partners.html">Партнерам</a>
+          <a href="./reviews.html">Отзывы</a>
+          <a href="./about.html">О нас</a>
+        </nav>
+
+        <div class="hdr-actions">
+          
+          <div class="user-menu">
+            <button class="iconbtn" id="userMenuBtn" title="Профиль" aria-label="Профиль">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M20 21a8 8 0 0 0-16 0" stroke="#8AA0AE" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="#8AA0AE" stroke-width="2"/>
+            </svg>
+            </button>
+            <div class="dropdown" id="userMenu" hidden>
+              <div id="userMenuLoggedOut">
+                <a class="ditem" href="./login.html">Войти</a>
+                <a class="ditem" href="./register.html">Регистрация</a>
+              </div>
+              <div id="userMenuLoggedIn" style="display:none">
+                <a class="ditem" href="./account.html">Личный кабинет</a>
+                <button class="ditem danger" type="button" id="logoutBtn">Выйти</button>
+              </div>
+            </div>
+          </div>
+          <a class="iconbtn" href="https://t.me/cryptoEXsupport" target="_blank" rel="noopener" title="Telegram" aria-label="Telegram">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M21.8 4.6 3.7 11.6c-1.2.5-1.2 1.2-.2 1.5l4.6 1.4 1.7 5.1c.2.6.1.8.7.8.5 0 .7-.2 1-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-15.5c.3-1.2-.5-1.7-1.1-1.3Z" stroke="#8AA0AE" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <div class="lang" title="Язык"><span class="dot"></span> RU</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="banner">
+      Пожалуйста, укажите актуальный контакт для связи! Это необходимо для получения средств!
+      Выплата может быть произведена по СБП по телефону указанному в заявке.
+    </div>
+
+    <section class="grid">
+      <div class="card">
+        <h2>1. Отдаете</h2>
+
+        <div class="amount-row">
+          <input id="giveAmount" type="number" inputmode="decimal" min="0" step="any" placeholder="Введите сумму">
+          <div class="amount-suffix">
+            <span class="mini-badge">₮</span>
+            <span id="giveCode">USDT</span>
+          </div>
+        </div>
+
+        <div class="amount-hint">
+          <span>Введите сумму</span>
+          <span class="right">≈ <b id="previewRub">0</b> RUB</span>
+        </div>
+        <div class="min-warn" id="minWarn" style="display:none; margin-top:8px; color:#d32f2f; font-size:12px;">Минимальная сумма сделки — 30 000 RUB</div>
+
+        <!-- Отдаёте: убраны Банки/Наличные -->
+        <div class="tabs">
+          <div class="tab active">Криптовалюты</div>
+        </div>
+
+        <div class="chips" data-chips="give">
+          <div class="chip active" data-filter="all">Все</div>
+          <div class="chip" data-filter="stable">Стейбл</div>
+          <div class="chip" data-filter="fav">Избранное</div>
+        </div>
+
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="#8AA0AE" stroke-width="2"/>
+            <path d="M21 21l-4.3-4.3" stroke="#8AA0AE" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="giveSearch" placeholder="Поиск" />
+        </div>
+
+        <div class="section-title">Выберите криптовалюту</div>
+        <div class="list" id="giveList"></div>
+
+        <div class="swap-bubble" title="Обмен">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M7 7h12l-2.5-2.5" stroke="#0a8f8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M17 17H5l2.5 2.5" stroke="#0a8f8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2. Получаете</h2>
+
+        <div class="amount-row">
+          <input id="getAmount" type="text" value="0" disabled>
+          <div class="amount-suffix">
+            <span class="mini-badge">✓</span>
+            <span>RUB</span>
+          </div>
+        </div>
+
+        <div class="amount-hint">
+          <span>Рассчитывается автоматически</span>
+          
+        </div>
+
+        <!-- Получаете: убраны Наличные -->
+        <div class="tabs">
+          <div class="tab active">Банки</div>
+        </div>
+
+        <div class="chips" data-chips="get">
+          <div class="chip active" data-filter="all">Все</div>
+          <div class="chip" data-filter="rub">RUB</div>
+        </div>
+
+        <div class="search">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="#8AA0AE" stroke-width="2"/>
+            <path d="M21 21l-4.3-4.3" stroke="#8AA0AE" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <input id="getSearch" placeholder="Поиск" />
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+          <div class="section-title" style="margin:6px 0 10px">Выберите валюту</div>
+          <div style="color:#9aa7b2;font-size:12px">Резервы валют:</div>
+        </div>
+
+        <div class="list" id="getList"></div>
+      </div>
+
+      <div class="card">
+        <h2>3. Ввод данных</h2>
+
+        <div class="rate" id="rateLine">Курс обмена: 1 USDT = 79.68607 RUB</div>
+
+        <div class="pair">
+          <div class="side">
+            <div class="ico" id="giveIco" style="background:#25b88f">T</div>
+            <div>
+              <div class="label" id="giveName">Tether TRC20</div>
+              <div style="color:#9aa7b2;font-size:12px"><span id="giveAmtText">0</span> <span id="giveCode2">USDT</span></div>
+            </div>
+          </div>
+
+          <div class="rotate" title="Поменять местами">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M7 7h12l-2.5-2.5" stroke="#8AA0AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M17 17H5l2.5 2.5" stroke="#8AA0AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+
+          <div class="side" style="justify-content:flex-end">
+            <div>
+              <div class="label" id="getName" style="text-align:right">Сбербанк</div>
+              <div style="color:#9aa7b2;font-size:12px;text-align:right"><span id="getAmtText">0</span> RUB</div>
+            </div>
+            <div class="ico" id="getIco" style="background:#2bbf64">✓</div>
+          </div>
+        </div>
+
+        <input class="field" placeholder="Номер карты*" />
+        <input class="field" placeholder="ФИО*" />
+        <input class="field" placeholder="Номер телефона СБП*" />
+        <input class="field" placeholder="E-mail*" />
+        <input class="field" placeholder="WhatsApp номер*" />
+        <input class="field" placeholder="Telegram" />
+
+        <label class="agree">
+          <input type="checkbox" id="agreeChk" />
+          <span>Нажимая на кнопку "Начать обмен", я соглашаюсь с правилами сервиса и политикой AML</span>
+        </label>
+
+        <button class="btn" id="startExchangeBtn" type="button" onclick="window.startExchange()">
+          Начать обмен
+          <span style="display:inline-flex;align-items:center">
+            <svg width="24" height="16" viewBox="0 0 24 16" fill="none">
+              <path d="M16 1l7 7-7 7" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M23 8H1" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+
+        <div class="note">
+          Обращаем Ваше внимание, что курс фиксируется после 1 подтверждения сети по ЦБ РФ.
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footer-row">
+        <div class="pills">
+          <a class="pill" href="#"><span class="mini-ico">✈</span> Telegram</a>
+          <a class="pill" href="mailto:info@cryptoex.cc"><span class="mini-ico">@</span> info@cryptoex.cc</a>
+          <a class="pill" href="#"><span class="mini-ico">✓</span> Bestchange.ru</a>
+          <a class="pill" href="#"><span class="mini-ico">✓</span> Moneyswap.online</a>
+          <a class="pill" href="#"><span class="mini-ico">✓</span> OKchanger.ru</a>
+          <a class="pill" href="#"><span class="mini-ico">✓</span> Glazok.org</a>
+          <a class="pill" href="#"><span class="mini-ico">✓</span> MyWot.com</a>
+          <a class="pill" href="#"><span class="mini-ico">✓</span> crypto-control.org</a>
+        </div>
+        <div class="copyright">© 2022-2024, CryptoEx</div>
+      </div>
+    </footer>
+  </main>
+
+  <div class="support" aria-label="Онлайн-поддержка">
+    <div class="support-top">
+      <div class="support-switch" aria-hidden="true"></div>
+      <div class="support-title">Онлайн-поддержка</div>
+      <div class="support-brand"><small>CryptoEx</small></div>
+    </div>
+  </div>
+
+  <script>
+      const MIN_RUB = 30000;
+
+    const coins = [
+  {id: "btc", name: "Bitcoin", ticker: "BTC", network: "bitcoin", address: "bc1q8kt8gqxan8caluvqrf386r97p98egs5236gsdx", rate: 6900646.8961764, icon: "assets/coins/btc.png"},
+  {id: "eth", name: "ETH", ticker: "ETH", network: "Ethereum", address: "0x3daDAe59400eC1E3821c8841dAe980c6c4e4c9C4", rate: 235676.4680128, icon: "assets/coins/eth.svg"},
+  {id: "usdt_tron", name: "USDT (TRON)", ticker: "USDT", network: "TRON (TRC20)", address: "TF722mD7u8MvtTPdCTDaoEccWA8yGb3JPt", rate: 81.88236, icon: "assets/coins/usdt_tron.png"},
+  {id: "usdt_ton", name: "USDT (TON)", ticker: "USDT", network: "TON", address: "UQAr2O8HYPRts_q81NYruKtF0TEpA70rSCd4ikaVYVTCeJYZ", rate: 81.88236, icon: "assets/coins/usdt_ton.png"},
+  {id: "ton", name: "TON", ticker: "TON", network: "TON", address: "UQAr2O8HYPRts_q81NYruKtF0TEpA70rSCd4ikaVYVTCeJYZ", rate: 143.771502, icon: "assets/coins/ton.png"},
+  {id: "trx", name: "TRX", ticker: "TRX", network: "TRON", address: "TF722mD7u8MvtTPdCTDaoEccWA8yGb3JPt", rate: 27.464384376, icon: "assets/coins/trx.png"},
+  {id: "ltc", name: "LTC", ticker: "LTC", network: "Litecoin", address: "ltc1q8x6rctlg5e0dws96hxndaw05d6avaxc8jcqleh", rate: 6071.1946544, icon: "assets/coins/ltc.png"},
+  {id: "doge", name: "DOGE", ticker: "DOGE", network: "DOGEcoin", address: "DQUEhZmqxPeWzEysw3LHLuiDYTVp98EiV6", rate: 14.166192092, icon: "assets/coins/doge.png"},
+  {id: "sol", name: "SOL", ticker: "SOL", network: "Solana", address: "351apBgmxjh9xGaiWLiDAppz9DAyjvqcYNbe416Tvf8Y", rate: 9948.86339068, icon: "assets/coins/sol.png"},
+  {id: "bnb", name: "BNB", ticker: "BNB", network: "BNB (BEP20)", address: "0x3daDAe59400eC1E3821c8841dAe980c6c4e4c9C4", rate: 67913.55228358, icon: "assets/coins/bnb.png"}
+];
+
+const banks = [
+      { name:"Сбербанк", icoText:"✓", icoBg:"#2bbf64", code:"RUB" },
+      { name:"Т-Банк", icoText:"T", icoBg:"#f0c400", icoLight:true, code:"RUB" },
+      { name:"Райффайзен", icoText:"R", icoBg:"#ffd400", icoLight:true, code:"RUB" },
+      { name:"СБП", icoText:"P", icoBg:"#ffffff", icoLight:true, code:"RUB", border:true },
+      { name:"ВТБ24", icoText:"В", icoBg:"#1f8cff", code:"RUB" },
+      { name:"Альфа-банк", icoText:"A", icoBg:"#ff4b4b", code:"RUB" },
+      { name:"Открытие", icoText:"O", icoBg:"#38bdf8", code:"RUB" },
+
+      { name:"Карта Мир", icoText:"МИР", icoBg:"#10b981", icoLight:true, code:"RUB" },
+      { name:"Росбанк", icoText:"p", icoBg:"#1d4ed8", code:"RUB" },
+      { name:"Почта Банк", icoText:"П", icoBg:"#ef4444", code:"RUB" },
+      { name:"Русский Стандарт", icoText:"РС", icoBg:"#111827", code:"RUB" },
+      { name:"Промсвязьбанк", icoText:"ПС", icoBg:"#f97316", code:"RUB" },
+      { name:"Банк Авангард", icoText:"A", icoBg:"#16a34a", code:"RUB" },
+      { name:"Россельхозбанк", icoText:"Р", icoBg:"#166534", code:"RUB" },
+      { name:"РНКБ", icoText:"Р", icoBg:"#06b6d4", code:"RUB" },
+      { name:"Банк Хоум Кредит", icoText:"H", icoBg:"#f43f5e", code:"RUB" },
+      { name:"Газпромбанк", icoText:"Г", icoBg:"#2563eb", code:"RUB" },
+      { name:"МТС Банк", icoText:"М", icoBg:"#ef4444", code:"RUB" }
+    ];
+
+    let selectedCoin = coins[0];
+    let selectedBank = banks[0];
+    let giveFilter = "all";
+    let bankFilter = "all";
+
+    const giveListEl = document.getElementById("giveList");
+    const getListEl  = document.getElementById("getList");
+    const giveAmountEl = document.getElementById("giveAmount");
+    const getAmountEl  = document.getElementById("getAmount");
+    const previewRubEl = document.getElementById("previewRub");
+    const minWarnEl = document.getElementById("minWarn");
+    const startBtnEl = document.getElementById("startExchangeBtn");
+
+    const giveNameEl = document.getElementById("giveName");
+    const giveIcoEl  = document.getElementById("giveIco");
+    const giveAmtTextEl = document.getElementById("giveAmtText");
+    const giveCodeEl = document.getElementById("giveCode");
+    const giveCode2El = document.getElementById("giveCode2");
+
+    const getNameEl = document.getElementById("getName");
+    const getIcoEl  = document.getElementById("getIco");
+    const getAmtTextEl = document.getElementById("getAmtText");
+
+    function formatNumber(n){
+      if (!isFinite(n)) return "0";
+      const s = n.toFixed(2);
+      return s.replace(/\.00$/, "");
+    }
+    function computeRub(){
+      const val = parseFloat(String(giveAmountEl.value).replace(",", "."));
+      if (!isFinite(val)) return 0;
+      return Math.max(0, val) * (selectedCoin ? selectedCoin.rate : 0);
+    }
+    function syncAmounts(){
+      const rub = computeRub();
+      const giveVal = parseFloat(String(giveAmountEl.value).replace(",", "."));
+      const giveOut = (isFinite(giveVal) ? Math.max(0, giveVal) : 0);
+
+      previewRubEl.textContent = formatNumber(rub);
+      getAmountEl.value = formatNumber(rub);
+
+      giveAmtTextEl.textContent = formatNumber(giveOut);
+      getAmtTextEl.textContent  = formatNumber(rub);
+
+      // Min deal check (in RUB)
+      if (rub > 0 && rub < MIN_RUB) {
+        if (minWarnEl) {
+          minWarnEl.style.display = 'block';
+          minWarnEl.textContent = `Минимальная сумма сделки — ${MIN_RUB.toLocaleString('ru-RU')} RUB`;
+        }
+        if (startBtnEl) startBtnEl.disabled = true;
+      } else {
+        if (minWarnEl) minWarnEl.style.display = 'none';
+        if (startBtnEl) startBtnEl.disabled = false;
+      }
+    }
+
+    function setCoin(coin){
+      selectedCoin = coin;
+      giveNameEl.textContent = coin.name;
+      giveIcoEl.textContent = coin.icoText;
+      giveIcoEl.style.background = coin.icoBg;
+      giveCodeEl.textContent = coin.code;
+      giveCode2El.textContent = coin.code;
+      document.getElementById("rateLine").textContent = selectedCoin ? `Курс обмена: 1 ${selectedCoin.ticker} = ${selectedCoin.rate} RUB` : `Курс обмена: —`;
+      syncAmounts();
+
+      renderCoins();
+    }
+    function setBank(bank){
+      selectedBank = bank;
+      getNameEl.textContent = bank.name;
+      getIcoEl.textContent = bank.icoText;
+      getIcoEl.style.background = bank.icoBg;
+      getIcoEl.style.color = bank.icoLight ? "#2b3a42" : "#fff";
+      getIcoEl.style.border = bank.border ? "2px solid #1a1a1a" : "none";
+      syncAmounts();
+      renderBanks();
+    }
+    function createItem({name, icon, icoText, icoBg, icoLight, code, border}, active, rightCode=true){
+      const div = document.createElement("div");
+      div.className = "item" + (active ? " active" : "");
+      const iconHtml = icon ? `<img class="coin-ico-img" src="${icon}" alt="">` : (icoText || "");
+      div.innerHTML = `
+        <div class="ico ${icoLight ? "light":""}" style="${border ? "border:2px solid #1a1a1a;" : ""}">
+          ${iconHtml}
+        </div>
+        <div class="name">${name}</div>
+        <div class="right">
+          ${rightCode ? `<span>${code || ""}</span>` : ``}
+          ${active ? `<div class="check">✓</div>` : `<div class="check" style="opacity:.35">✓</div>`}
+        </div>
+      `;
+      return div;
+    }
+
+
+    function renderCoins(){
+      const q = (document.getElementById("giveSearch").value || "").trim().toLowerCase();
+      giveListEl.innerHTML = "";
+      const filtered = coins.filter(c => {
+        const byText = c.name.toLowerCase().includes(q);
+        if (!byText) return false;
+        if (giveFilter === "stable") return c.stable;
+        if (giveFilter === "fav") return c.fav;
+        return true;
+      });
+      filtered.forEach(c => {
+        const item = createItem({name:c.name, icon:c.icon, icoText:"", icoBg:"", icoLight:false, code:"", border:false},
+                                c.id === selectedCoin.id, false);
+        item.addEventListener("click", () => setCoin(c));
+        giveListEl.appendChild(item);
+      });
+    }
+
+    function renderBanks(){
+      const q = (document.getElementById("getSearch").value || "").trim().toLowerCase();
+      getListEl.innerHTML = "";
+      const filtered = banks.filter(b => {
+        const byText = b.name.toLowerCase().includes(q);
+        if (!byText) return false;
+        if (bankFilter === "rub") return b.code === "RUB";
+        return true;
+      });
+      filtered.forEach(b => {
+        const item = createItem({name:b.name, icoText:b.icoText, icoBg:b.icoBg, icoLight:!!b.icoLight, code:b.code, border:!!b.border},
+                                b.name === selectedBank.name, true);
+        item.addEventListener("click", () => setBank(b));
+        getListEl.appendChild(item);
+      });
+    }
+
+    document.getElementById("giveSearch").addEventListener("input", renderCoins);
+    document.getElementById("getSearch").addEventListener("input", renderBanks);
+    giveAmountEl.addEventListener("keydown", (e) => {
+      if (e.key === "-" || e.key === "+" || e.key === "e" || e.key === "E") e.preventDefault();
+    });
+    giveAmountEl.addEventListener("input", () => {
+      // Запрещаем отрицательные значения (в т.ч. при вставке)
+      let raw = String(giveAmountEl.value || "").replace(",", ".");
+      if (raw.trim() === "") { syncAmounts(); return; }
+      const n = Number(raw);
+      if (!isFinite(n)) { giveAmountEl.value = ""; syncAmounts(); return; }
+      let v = n;
+      if (v < 0) v = 0;
+      giveAmountEl.value = String(v);
+      syncAmounts();
+    });
+
+    document.querySelectorAll('[data-chips="give"] .chip').forEach(ch => {
+      ch.addEventListener("click", () => {
+        document.querySelectorAll('[data-chips="give"] .chip').forEach(x => x.classList.remove("active"));
+        ch.classList.add("active");
+        giveFilter = ch.getAttribute("data-filter") || "all";
+        renderCoins();
+      });
+    });
+    document.querySelectorAll('[data-chips="get"] .chip').forEach(ch => {
+      ch.addEventListener("click", () => {
+        document.querySelectorAll('[data-chips="get"] .chip').forEach(x => x.classList.remove("active"));
+        ch.classList.add("active");
+        bankFilter = ch.getAttribute("data-filter") || "all";
+        renderBanks();
+      });
+    });
+
+    setCoin(selectedCoin);
+    setBank(selectedBank);
+    renderCoins();
+    renderBanks();
+    syncAmounts();
+
+    // Start exchange -> create local draft and open the "request" page
+    const startBtn = document.getElementById("startExchangeBtn");
+    const agreeChk = document.getElementById("agreeChk");
+
+    // Делаем функцию доступной и для inline onclick
+    window.startExchange = function startExchange() {
+      if (!agreeChk.checked) {
+        alert("Чтобы начать обмен, нужно согласиться с правилами сервиса и политикой AML.");
+        return;
+      }
+
+      const give = Number(String(giveAmountEl.value || "").replace(",", ".")) || 0;
+      const rubAmount = Number(String(getAmountEl.value || "").replace(",", ".")) || Math.round(give * (selectedCoin ? selectedCoin.rate : 0));
+
+      if (rubAmount < MIN_RUB) {
+        alert(`Минимальная сумма сделки — ${MIN_RUB.toLocaleString('ru-RU')} ₽`);
+        return;
+      }
+      if (!selectedCoin || !selectedBank) {
+        alert("Выберите валюту и банк, затем нажмите 'Начать обмен'.");
+        return;
+      }
+
+      const rid = `G${Math.floor(10000 + Math.random() * 89999)}`;
+      const exchangeDraft = {
+        rid,
+        createdAt: new Date().toISOString(),
+        coin: selectedCoin.symbol,
+        coinName: selectedCoin.name,
+        network: selectedCoin.network,
+        address: selectedCoin.address,
+        bank: selectedBank.name,
+        give: give,
+        get: rubAmount,
+        rate: (selectedCoin ? selectedCoin.rate : 0),
+      };
+
+      // Persist the request draft for request.html (no server)
+      try {
+        localStorage.setItem("cryptoex_last_request", JSON.stringify(exchangeDraft));
+      } catch (e) {}
+
+      // Переходим на страницу заявки. Работает и при file:// (двойной клик), и на домене.
+      window.location.href = new URL("request.html", window.location.href).toString();
+    };
+
+    if (startBtn) {
+      startBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.startExchange();
+      });
+    }
+</script>
+
+  <script src="./auth.js"></script>
+</body>
+</html>

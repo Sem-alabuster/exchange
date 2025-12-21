@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CryptoEx — Правила</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f7f9fb;--card:#fff;--text:#12212a;--line:#e9eef3;--teal:#0a8f8a;--shadow:0 18px 40px rgba(16,41,53,.10);--radius:28px}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 18px}
+    .topbar{background:#fff;border-bottom:1px solid var(--line)}
+    .topbar-inner{height:82px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .brand{display:flex;align-items:center;gap:12px;min-width:240px}
+    .brand img{height:54px;width:auto;display:block}
+    .nav{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;flex:1;color:#2b3a42;font-size:14px}
+    .nav .work{color:#c59a57;font-weight:600;margin-right:10px;white-space:nowrap}
+    .hdr-actions{display:flex;align-items:center;gap:10px;min-width:220px;justify-content:flex-end}
+    .iconbtn{width:34px;height:34px;border:1px solid var(--line);border-radius:999px;background:#fff;display:grid;place-items:center}
+    .lang{display:flex;align-items:center;gap:8px;padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-weight:600;font-size:13px}
+    .dot{width:10px;height:10px;border-radius:50%;background:var(--teal)}
+
+    .page{padding:34px 0 40px}
+    h1{margin:0 0 18px;font-size:40px;font-weight:900;letter-spacing:-.4px}
+    .tabsline{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:end;border-bottom:1px solid var(--line);margin-bottom:18px}
+    .tab{text-align:center;padding:14px 10px 12px;font-size:14px;color:#90a0ad;font-weight:800;position:relative;cursor:pointer;user-select:none}
+    .tab.active{color:var(--teal)}
+    .tab.active::after{content:"";position:absolute;left:14%;right:14%;bottom:-1px;height:2px;background:var(--teal);border-radius:2px}
+    .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 28px}
+    .card h3{margin:0 0 14px;font-size:16px;font-weight:900;color:#1f6f6b}
+    .doc{font-size:14px;line-height:1.55;color:#2b3a42;white-space:pre-wrap}
+    .muted{color:#7f8b96;font-size:13px;line-height:1.5}
+    .warn{background:#fff7e6;border:1px solid #ffd591;border-radius:12px;padding:12px 14px;color:#6b4e16;margin:12px 0;font-size:13px;display:none}
+    
+    /* Contacts tab */
+    .contactsWrap{padding:10px 0}
+    .contactsTitle{font-size:26px;font-weight:800;color:#12212a;margin:8px 0 14px}
+    .contactsGrid{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:start}
+    .contactsText{font-size:14px;line-height:1.65;color:#2b3a42;max-width:640px}
+    .contactCard{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:0 10px 30px rgba(16,45,62,.06);margin-bottom:14px}
+    .contactIcon{width:44px;height:44px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;flex:0 0 44px}
+    .contactLabel{font-weight:600;color:#12212a;font-size:14px}
+    .contactLink{color:#12212a;text-decoration:none}
+    .contactLink:hover{text-decoration:underline}
+@media (max-width:1040px){
+      .tabsline{grid-template-columns:1fr;gap:0}
+      .tab{border-top:1px solid var(--line)}
+      .tab:first-child{border-top:none}
+      h1{font-size:32px}
+      .brand{min-width:auto}
+      .hdr-actions{min-width:auto}
+      .nav{justify-content:flex-start}
+    }
+  
+
+/* auth-dropdown */
+.user-menu{ position:relative; }
+.dropdown{
+  position:absolute; right:0; top:46px;
+  min-width:180px;
+  background:#fff; border:1px solid var(--line);
+  border-radius:14px; box-shadow:var(--shadow);
+  padding:8px; display:flex; flex-direction:column; gap:6px;
+  z-index:1000;
+}
+  .dropdown[hidden]{ display:none !important; }
+
+.ditem{
+  display:block;
+  padding:10px 12px;
+  border-radius:10px;
+  color:var(--text);
+  text-decoration:none;
+  font-weight:600;
+  font-size:14px;
+}
+.ditem:hover{ background:#f4f6f8; }
+.ditem.danger{ color:#b42318; background:transparent; border:0; text-align:left; cursor:pointer; width:100%; }
+.ditem.danger:hover{ background:#fff1f0; }
+
+
+    .contactCardLink{ text-decoration:none; color:inherit; }
+    .contactCardLink:hover{ filter: brightness(0.98); }
+</style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="container">
+      <div class="topbar-inner">
+        <a class="brand" href="./index.html"><img src="./logo.svg" alt="CryptoEx" /></a>
+        <nav class="nav">
+          <span class="work">Работаем 24/7</span>
+          <a href="./rules.html#rules" style="font-weight:900;color:var(--teal)">Правила</a>
+          <a href="./rules.html#aml">AML/KYC</a>
+          <a href="./partners.html">Партнерам</a>
+          <a href="./reviews.html">Отзывы</a>
+          <a href="./about.html">О нас</a>
+        </nav>
+        <div class="hdr-actions">
+          
+          <div class="user-menu">
+            <button class="iconbtn" id="userMenuBtn" title="Профиль" aria-label="Профиль">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M20 21a8 8 0 0 0-16 0" stroke="#8AA0AE" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 13a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="#8AA0AE" stroke-width="2"/>
+            </svg>
+            </button>
+            <div class="dropdown" id="userMenu" hidden>
+              <div id="userMenuLoggedOut">
+                <a class="ditem" href="./login.html">Войти</a>
+                <a class="ditem" href="./register.html">Регистрация</a>
+              </div>
+              <div id="userMenuLoggedIn" style="display:none">
+                <a class="ditem" href="./account.html">Личный кабинет</a>
+                <button class="ditem danger" type="button" id="logoutBtn">Выйти</button>
+              </div>
+            </div>
+          </div>
+          <div class="lang" title="Язык"><span class="dot"></span> RU</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container page">
+    <h1>Правила</h1>
+
+    <div class="tabsline" id="tabs">
+      <div class="tab active" data-tab="rules">Правила обмена</div>
+      <div class="tab" data-tab="privacy">Политика конфиденциальности</div>
+      <div class="tab" data-tab="aml">Политика AML</div>
+      <div class="tab" data-tab="contacts">Контакты</div>
+    </div>
+
+    <section class="card">
+      <h3 id="docTitle">Условия и положения сервиса CryptoEx</h3>
+
+      <div class="warn" id="warn">
+        Похоже, браузер заблокировал чтение rules.txt (обычно так бывает при открытии файла двойным кликом).<br>
+        Открой через локальный сервер: <b>python -m http.server 5500</b> и зайди на <b>http://localhost:5500/rules.html</b>
+      </div>
+
+      <div class="doc" id="docRules">Загрузка правил...</div>
+
+      <div id="docPrivacy" class="doc" style="display:none">Загрузка...</div>
+      <div id="docAml" class="doc" style="display:none">Загрузка...</div>
+      <div id="docContacts" style="display:none"></div>
+    </section>
+  </main>
+
+  <script>
+    const tabs = document.getElementById("tabs");
+    const title = document.getElementById("docTitle");
+    const rules = document.getElementById("docRules");
+    const privacy = document.getElementById("docPrivacy");
+    const aml = document.getElementById("docAml");
+    const contacts = document.getElementById("docContacts");
+    const warn = document.getElementById("warn");
+
+    let rulesLoadFailed = false;
+    let privacyLoaded = false;
+    let amlLoaded = false;
+    let contactsRendered = false;
+
+    function normalizeBrand(t){
+      return String(t)
+        .replaceAll("info@greenex.cc","info@cryptoex.cc")
+        .replaceAll("https://greenex.cc/","https://cryptoex.cc/")
+        .replaceAll("https://greenex.cc","https://cryptoex.cc")
+        .replaceAll("GreenEx","CryptoEx")
+        .replaceAll("Greenex","CryptoEx")
+        .replaceAll("greenex.cc","cryptoex.cc")
+        .replaceAll("greenex","cryptoex");
+    }
+
+    async function loadText(file){
+      const res = await fetch(file, { cache: "no-store" });
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      return normalizeBrand(await res.text());
+    }
+
+    async function loadRules(){
+      try{
+        const txt = await loadText("./rules.txt");
+        rules.textContent = txt;
+        rulesLoadFailed = false;
+        warn.style.display = "none";
+      }catch(e){
+        rulesLoadFailed = true;
+        warn.style.display = "block";
+        rules.textContent = "Не удалось загрузить rules.txt. См. подсказку выше.";
+      }
+    }
+
+    async function loadPrivacy(){
+      if (privacyLoaded) return;
+      try{
+        const txt = await loadText("./privacy.txt");
+        privacy.textContent = txt;
+        privacyLoaded = true;
+      }catch(e){
+        privacy.textContent = "Не удалось загрузить privacy.txt.";
+      }
+    }
+
+    async function loadAml(){
+      if (amlLoaded) return;
+      try{
+        const txt = await loadText("./aml.txt");
+        aml.textContent = txt;
+        amlLoaded = true;
+      }catch(e){
+        aml.textContent = "Не удалось загрузить aml.txt.";
+      }
+    }
+
+    function renderContacts(){
+      if (contactsRendered) return;
+      contactsRendered = true;
+      contacts.innerHTML = `
+        <div class="contactsWrap">
+          <div class="contactsTitle">Техподдержка сервиса CryptoEx</div>
+          <div class="contactsGrid">
+            <div class="contactsText">
+              Мы готовы к общению с нашими клиентами. Наша задача сделать максимально
+              удобный для наших клиентов сервис. По этой причине мы открыты к общению и
+              готовы ответить на вопросы или оказать помощь.
+            </div>
+            <div>
+              <a class="contactCard contactCardLink" href="https://t.me/cryptoEXsupport" target="_blank" rel="noopener">
+                <div class="contactIcon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 4L2 12l7 2 2 7 3-4 4 3 4-16Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="M22 4 9 14" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </div>
+                <div class="contactLabel">Telegram</div>
+              </a>
+
+              <div class="contactCard">
+                <div class="contactIcon" aria-hidden="true">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 6h16v12H4V6Z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                    <path d="m4 7 8 6 8-6" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                  </svg>
+                </div>
+                <div class="contactLabel"><a class="contactLink" href="mailto:info@cryptoex.cc">info@cryptoex.cc</a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function setActiveTab(which){
+      [...tabs.querySelectorAll(".tab")].forEach(x => x.classList.toggle("active", x.dataset.tab === which));
+    }
+
+    function show(which){
+      setActiveTab(which);
+
+      rules.style.display = (which === "rules") ? "" : "none";
+      privacy.style.display = (which === "privacy") ? "" : "none";
+      aml.style.display = (which === "aml") ? "" : "none";
+      contacts.style.display = (which === "contacts") ? "" : "none";
+
+      if(which === "rules"){
+        title.textContent = "Условия и положения сервиса CryptoEx";
+        warn.style.display = rulesLoadFailed ? "block" : "none";
+      }
+      if(which === "privacy"){
+        title.textContent = "Политика конфиденциальности CryptoEx";
+        warn.style.display = "none";
+        loadPrivacy();
+      }
+      if(which === "aml"){
+        title.textContent = "Политика AML CryptoEx";
+        warn.style.display = "none";
+        loadAml();
+      }
+      if(which === "contacts"){
+        title.textContent = "Контакты";
+        warn.style.display = "none";
+        renderContacts();
+      }
+    }
+
+    function tabFromHash(){
+      const key = (location.hash || "").replace("#","").trim();
+      if(key === "privacy" || key === "aml" || key === "contacts" || key === "rules") return key;
+      return "rules";
+    }
+
+    tabs.addEventListener("click",(e)=>{
+      const t = e.target.closest(".tab");
+      if(!t) return;
+      const key = t.dataset.tab;
+      history.replaceState(null, "", "#" + key);
+      show(key);
+    });
+
+    window.addEventListener("hashchange", ()=>{
+      show(tabFromHash());
+    });
+
+    // init
+    loadRules().then(()=>show(tabFromHash()));
+  </script>
+
+  <script src="./auth.js"></script>
+</body>
+</html>

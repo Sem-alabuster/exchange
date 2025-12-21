@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Личный кабинет — CryptoEx</title>
+  <style>
+  :root{
+    --bg:#f6f8f9; --card:#fff; --text:#0b1f19; --muted:#6b7a76; --line:#e7eceb;
+    --primary:#0aa39a; --primary2:#067e77; --shadow:0 18px 40px rgba(0,0,0,.06);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif; background:var(--bg); color:var(--text); }
+  a{ color:inherit; text-decoration:none; }
+  .container{ width:min(1160px, calc(100% - 40px)); margin:0 auto; }
+  header{ background:#fff; border-bottom:1px solid var(--line); }
+  .nav{ display:flex; align-items:center; justify-content:space-between; gap:18px; padding:18px 0; }
+  .logo{ display:flex; align-items:center; gap:12px; font-weight:900; letter-spacing:.2px; color:var(--primary2); }
+  
+  .logo-img{ height:32px; width:auto; display:block; }
+.logo-badge{ width:34px; height:34px; border-radius:50%; background:rgba(10,163,154,.12); display:grid; place-items:center; border:1px solid rgba(10,163,154,.25); }
+  .menu{ display:flex; align-items:center; gap:18px; font-weight:600; color:#2a3d37; }
+  .menu a{ padding:10px 8px; border-radius:12px; }
+  .menu a:hover{ background:#f2f6f6; }
+  .icons{ display:flex; align-items:center; gap:10px; }
+  .iconbtn{ width:40px; height:40px; border-radius:14px; border:1px solid var(--line); background:#fff; display:grid; place-items:center; cursor:pointer; }
+  .iconbtn:hover{ background:#f6faf9; }
+  .pill{ border:1px solid var(--line); background:#fff; border-radius:999px; padding:8px 12px; font-weight:700; display:flex; align-items:center; gap:8px; }
+  .dot{ width:8px; height:8px; border-radius:999px; background:var(--primary); }
+  main{ padding:44px 0 70px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+  .card-pad{ padding:26px; }
+  .title{ font-size:42px; margin:0 0 18px; }
+  .center-wrap{ display:flex; justify-content:center; }
+  .auth-card{ width:min(520px, 100%); }
+  .auth-head{ text-align:center; font-weight:900; font-size:26px; padding:22px 22px 8px; }
+  .auth-body{ padding:22px; border-top:1px solid var(--line); }
+  .field{ display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
+  .field label{ font-weight:700; color:#2a3d37; }
+  .input{ width:100%; padding:14px 14px; border-radius:14px; border:1px solid var(--line); outline:none; background:#f6f8fa; }
+  .input:focus{ border-color:rgba(10,163,154,.5); background:#fff; }
+  .btn{ width:100%; padding:14px 18px; border-radius:999px; border:0; background:linear-gradient(180deg, var(--primary), var(--primary2)); color:#fff; font-weight:900; cursor:pointer; }
+  .btn:disabled{ opacity:.6; cursor:not-allowed; }
+  .err{ background:#fff1f0; border:1px solid #ffd6d3; color:#8a1f17; padding:10px 12px; border-radius:14px; font-weight:700; margin:0 0 14px; display:none; }
+  .hint{ color:var(--muted); font-weight:600; font-size:13px; text-align:center; margin-top:12px; }
+  
+  .acc-grid{ display:grid; grid-template-columns: 320px 1fr; gap:24px; align-items:start; }
+  .acc-left .head{ display:flex; align-items:center; justify-content:space-between; padding:18px 18px 10px; font-weight:900; font-size:22px; }
+  .acc-left .head .out{ width:34px; height:34px; border-radius:12px; border:1px solid var(--line); background:#fff; cursor:pointer; display:grid; place-items:center; }
+  .acc-left .menu2{ border-top:1px solid var(--line); }
+  .acc-left .mi{ display:flex; align-items:center; gap:12px; padding:14px 16px; border-top:1px solid #f0f3f3; cursor:pointer; font-weight:700; color:#2a3d37; }
+  .acc-left .mi:hover{ background:#f6faf9; }
+  .acc-left .mi svg{ opacity:.85; }
+  .acc-left .mi.active{ background:#f2fbfa; position:relative; }
+  .acc-left .mi.active:after{ content:""; position:absolute; right:0; top:0; bottom:0; width:3px; background:var(--primary); border-radius:8px; }
+  .acc-right .tabs{ display:flex; gap:10px; margin-bottom:14px; }
+  .tabbtn{ padding:10px 16px; border-radius:14px; border:1px solid var(--line); background:#fff; font-weight:900; cursor:pointer; }
+  .tabbtn.active{ background:var(--primary); color:#fff; border-color:transparent; }
+  .panel{ padding:22px; }
+  .panel h2{ margin:0 0 14px; font-size:22px; }
+  .form-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+  .form-grid .field{ margin:0; }
+  .wide{ grid-column: span 2; }
+  .btn-sm{ width:auto; padding:14px 32px; }
+  .table-wrap{ overflow:auto; border:1px solid var(--line); border-radius:16px; }
+  table{ width:100%; border-collapse:collapse; font-weight:700; }
+  th, td{ padding:12px 12px; border-bottom:1px solid #f0f3f3; text-align:left; white-space:nowrap; }
+  th{ font-size:13px; color:#2a3d37; background:#fbfcfc; }
+  .empty{ text-align:center; color:var(--muted); font-weight:700; padding:28px 10px; }
+  @media (max-width: 980px){
+    .acc-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* auth-dropdown */
+  .user-menu{ position:relative; }
+  .dropdown{ position:absolute; right:0; top:46px; min-width:180px; background:#fff; border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); padding:8px; display:flex; flex-direction:column; gap:6px; z-index:1000; }
+  .dropdown[hidden]{ display:none !important; }
+
+  .ditem{ display:block; padding:10px 12px; border-radius:10px; color:var(--text); text-decoration:none; font-weight:700; font-size:14px; }
+  .ditem:hover{ background:#f4f6f8; }
+  .ditem.danger{ color:#b42318; background:transparent; border:0; text-align:left; cursor:pointer; width:100%; }
+  .ditem.danger:hover{ background:#fff1f0; }
+    
+  /* partner */
+  .copyrow{ display:flex; gap:10px; align-items:center; }
+  .copyrow .input{ flex:1; }
+  .refbox{flex:1;min-width:250px;height:44px;border:1px solid #d6e6e7;border-radius:12px;padding:0 12px;background:#f7fbfb;display:flex;align-items:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:13px;color:#2b3a42}
+  .hint{ margin-top:8px; font-size:13px; color:var(--muted); font-weight:700; }
+  .statrow{ display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-top:14px; }
+  .stat{ border:1px solid var(--line); border-radius:16px; padding:14px; background:#fff; }
+  .stat-num{ font-size:20px; font-weight:900; color:#0b2a12; }
+  .stat-label{ margin-top:4px; font-size:13px; color:var(--muted); font-weight:800; }
+  .payout{ display:flex; align-items:center; justify-content:space-between; gap:14px; margin-top:14px; padding:14px; border:1px solid var(--line); border-radius:16px; background:#fbfcfc; }
+  .bal-label{ font-size:13px; color:var(--muted); font-weight:800; }
+  .bal-num{ font-size:22px; font-weight:900; margin-top:4px; }
+  .payout-actions{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; }
+  @media (max-width: 980px){
+    .statrow{ grid-template-columns: 1fr; }
+    .payout{ flex-direction:column; align-items:flex-start; }
+    .payout-actions{ align-items:flex-start; width:100%; }
+    .copyrow{ flex-direction:column; align-items:stretch; }
+    .copyrow .btn{ width:100%; }
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <div class="nav">
+      <a class="logo" href="./index.html"><img class="logo-img" src="./logo.svg" alt="CryptoEx"></a>
+      <nav class="menu">
+        <a href="./rules.html">Правила</a>
+        <a href="./rules.html#aml">AML/KYC</a>
+        <a href="./partners.html">Партнерам</a>
+        <a href="./reviews.html">Отзывы</a>
+        <a href="./about.html">О нас</a>
+      </nav>
+      <div class="icons">
+        <div class="user-menu">
+          <button class="iconbtn" id="userMenuBtn" title="Профиль" aria-label="Профиль">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 12a4.2 4.2 0 1 0 0-8.4A4.2 4.2 0 0 0 12 12Z" stroke="#0aa39a" stroke-width="2"/>
+              <path d="M4 20.2c1.9-4 5.1-6 8-6s6.1 2 8 6" stroke="#0aa39a" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+          <div class="dropdown" id="userMenu" hidden>
+            <div id="userMenuLoggedOut">
+              <a class="ditem" href="./login.html">Войти</a>
+              <a class="ditem" href="./register.html">Регистрация</a>
+            </div>
+            <div id="userMenuLoggedIn" style="display:none">
+              <a class="ditem" href="./account.html">Личный кабинет</a>
+              <button class="ditem danger" type="button" id="logoutBtn">Выйти</button>
+            </div>
+          </div>
+        </div>
+        <a class="iconbtn" href="https://t.me/cryptoEXsupport" target="_blank" rel="noopener" title="Telegram" aria-label="Telegram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M22 4 2.9 11.3c-.8.3-.8 1.4 0 1.7l4.6 1.6 1.7 5.3c.2.8 1.2 1 1.7.4l2.7-3 5.2 3.8c.6.4 1.4.1 1.6-.6L23 5.6c.2-.9-.6-1.6-1.5-1.3Z" stroke="#0aa39a" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <div class="pill"><span class="dot"></span><span>RU</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    
+<h1 class="title" style="display:none">Личный кабинет</h1>
+<div class="acc-grid">
+  <div class="card acc-left">
+    <div class="head">
+      <span>Личный кабинет</span>
+</div>
+    <div class="menu2">
+      <div class="mi active" data-view="profile">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="#0aa39a" stroke-width="2"/>
+          <path d="M4 20c2-4 5-6 8-6s6 2 8 6" stroke="#0aa39a" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Личные данные
+      </div>
+      <div class="mi" data-view="history">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 8v5l3 2" stroke="#0aa39a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M21 12a9 9 0 1 1-3.1-6.7" stroke="#0aa39a" stroke-width="2" stroke-linecap="round"/>
+          <path d="M21 3v6h-6" stroke="#0aa39a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        История обменов
+      </div>
+      <div class="mi" data-view="password">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M17 11V8a5 5 0 0 0-10 0v3" stroke="#0aa39a" stroke-width="2"/>
+          <path d="M7 11h10a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2Z" stroke="#0aa39a" stroke-width="2"/>
+        </svg>
+        Смена пароля
+      </div>
+      <div class="mi" id="logoutRow">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M10 17l-1 1a2 2 0 0 1-2 0l-2-2a2 2 0 0 1 0-2l2-2a2 2 0 0 1 2 0l1 1" stroke="#0aa39a" stroke-width="2" stroke-linecap="round"/>
+          <path d="M14 7h3a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-3" stroke="#0aa39a" stroke-width="2" stroke-linecap="round"/>
+          <path d="M12 12h10" stroke="#0aa39a" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Выйти
+      </div>
+    </div>
+  </div>
+
+  <div class="acc-right">
+    <div class="tabs">
+      <button class="tabbtn active" type="button" id="tabLK">Личный кабинет</button>
+      <button class="tabbtn" type="button" id="tabPartner">Партнерский кабинет</button>
+    </div>
+
+    <div class="card panel" id="panelProfile">
+      <h2>Профиль</h2>
+      <div class="form-grid">
+        <div class="field">
+          <label>Email</label>
+          <input class="input" id="pfEmail" disabled />
+        </div>
+        <div class="field">
+          <label>Фамилия</label>
+          <input class="input" id="pfLast" placeholder="Фамилия" />
+        </div>
+        <div class="field">
+          <label>Имя</label>
+          <input class="input" id="pfFirst" placeholder="Имя" />
+        </div>
+        <div class="field">
+          <label>Отчество</label>
+          <input class="input" id="pfMiddle" placeholder="Отчество" />
+        </div>
+        <div class="field">
+          <label>Telegram</label>
+          <input class="input" id="pfTg" placeholder="Telegram" />
+        </div>
+        <div class="field">
+          <label>Телефон</label>
+          <input class="input" id="pfPhone" placeholder="Телефон" />
+        </div>
+        <div class="wide" style="display:flex; justify-content:flex-end; margin-top:8px;">
+          <button class="btn btn-sm" type="button" id="saveProfile">Сохранить</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card panel" id="panelHistory" style="display:none">
+      <h2>История обменов</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Создан</th>
+              <th>Курс</th>
+              <th>Отдаете</th>
+              <th>Получаете</th>
+              <th>Статус</th>
+            </tr>
+          </thead>
+          <tbody id="historyBody">
+          </tbody>
+        </table>
+        <div class="empty" id="historyEmpty" style="display:none">
+          Ничего не найдено<br/>
+          Обмены без авторизации не сохраняются в истории обменов.
+        </div>
+      </div>
+    </div>
+
+    <div class="card panel" id="panelPassword" style="display:none">
+      <h2>Смена пароля</h2>
+      <div class="form-grid">
+        <div class="field wide">
+          <label>Текущий пароль</label>
+          <input class="input" id="oldPass" type="password" placeholder="Текущий пароль" />
+        </div>
+        <div class="field">
+          <label>Новый пароль</label>
+          <input class="input" id="newPass" type="password" placeholder="Минимум 8 символов" />
+        </div>
+        <div class="field">
+          <label>Повторите пароль</label>
+          <input class="input" id="newPass2" type="password" placeholder="Повторите пароль" />
+        </div>
+        <div class="wide" style="display:flex; justify-content:flex-end; margin-top:8px;">
+          <button class="btn btn-sm" type="button" id="savePass">Сохранить</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="card panel" id="panelPartner" style="display:none">
+      <h2>Партнерский кабинет</h2>
+
+      <div class="field wide">
+        <label>Ваша реферальная ссылка</label>
+        <div class="copyrow">
+          <div class="refbox" id="refLinkBox" title=""></div>
+          <button class="btn btn-sm" type="button" id="copyRef">Скопировать</button>
+        </div>
+        <div class="hint" id="refHint">По этой ссылке можно переходить и сейчас, и после размещения на домене.</div>
+      </div>
+
+      <div class="statrow">
+        <div class="stat">
+          <div class="stat-num" id="refClicks">0</div>
+          <div class="stat-label">Переходы</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num" id="refRegs">0</div>
+          <div class="stat-label">Регистрации</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">1%</div>
+          <div class="stat-label">Вознаграждение</div>
+        </div>
+      </div>
+
+      <div class="payout">
+        <div class="bal">
+          <div class="bal-label">Баланс</div>
+          <div class="bal-num" id="refBalance">$0.00</div>
+        </div>
+        <div class="payout-actions">
+          <button class="btn" type="button" id="withdrawBtn" disabled>Вывести</button>
+          <div class="hint">Вывод доступен от $50</div>
+        </div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:14px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Последние переходы</th>
+            </tr>
+          </thead>
+          <tbody id="clicksBody"></tbody>
+        </table>
+        <div class="empty" id="clicksEmpty" style="display:none">Пока нет переходов</div>
+      </div>
+
+      <div class="table-wrap" style="margin-top:14px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Последние регистрации</th>
+            </tr>
+          </thead>
+          <tbody id="regsBody"></tbody>
+        </table>
+        <div class="empty" id="regsEmpty" style="display:none">Пока нет регистраций</div>
+      </div>
+    </div>
+
+</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- auth.js must be loaded BEFORE the inline cabinet logic -->
+<script src="./auth.js"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (!CryptoExAuth.requireAuth("./login.html")) return;
+
+  const panels = {
+    profile: document.getElementById("panelProfile"),
+    history: document.getElementById("panelHistory"),
+    password: document.getElementById("panelPassword"),
+    partner: document.getElementById("panelPartner"),
+  };
+
+  const tabLK = document.getElementById("tabLK");
+  const tabPartner = document.getElementById("tabPartner");
+
+  function setTopTab(which){
+    if (tabLK) tabLK.classList.toggle("active", which === "lk");
+    if (tabPartner) tabPartner.classList.toggle("active", which === "partner");
+  }
+
+  function show(view){
+    Object.keys(panels).forEach(k => panels[k].style.display = (k === view ? "block" : "none"));
+    document.querySelectorAll(".acc-left .mi[data-view]").forEach(el => {
+      el.classList.toggle("active", el.getAttribute("data-view") === view);
+    });
+
+    if (view === "history") renderHistory();
+    if (view === "partner") renderPartner();
+
+    setTopTab(view === "partner" ? "partner" : "lk");
+  }
+
+  document.querySelectorAll(".acc-left .mi[data-view]").forEach(el => {
+    el.addEventListener("click", () => show(el.getAttribute("data-view")));
+  });
+
+  if (tabLK) tabLK.addEventListener("click", () => show("profile"));
+  if (tabPartner) tabPartner.addEventListener("click", () => show("partner"));
+
+
+  // profile
+  const pf = CryptoExAuth.getMyProfile() || {};
+  document.getElementById("pfEmail").value = pf.email || (CryptoExAuth.getCurrentUser()||{}).email || "";
+  document.getElementById("pfLast").value = pf.lastName || "";
+  document.getElementById("pfFirst").value = pf.firstName || "";
+  document.getElementById("pfMiddle").value = pf.middleName || "";
+  document.getElementById("pfTg").value = pf.telegram || "";
+  document.getElementById("pfPhone").value = pf.phone || "";
+
+  document.getElementById("saveProfile").addEventListener("click", () => {
+    CryptoExAuth.updateProfile({
+      lastName: document.getElementById("pfLast").value.trim(),
+      firstName: document.getElementById("pfFirst").value.trim(),
+      middleName: document.getElementById("pfMiddle").value.trim(),
+      telegram: document.getElementById("pfTg").value.trim(),
+      phone: document.getElementById("pfPhone").value.trim(),
+    });
+    CryptoExAuth.toast("Данные сохранены");
+  });
+
+  // history
+  const body = document.getElementById("historyBody");
+  const empty = document.getElementById("historyEmpty");
+  function renderHistory(){
+    const rows = CryptoExAuth.getMyHistory();
+    body.innerHTML = "";
+    if (!rows.length){
+      empty.style.display = "block";
+      return;
+    }
+    empty.style.display = "none";
+    rows.slice(0, 200).forEach((r, idx) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${idx+1}</td>
+        <td>${r.created || "-"}</td>
+        <td>${r.rate || "-"}</td>
+        <td>${r.give || "-"}</td>
+        <td>${r.get || "-"}</td>
+        <td>${r.status || "Создана"}</td>
+      `;
+      body.appendChild(tr);
+    });
+  }
+
+  // partner
+  const refLinkEl = document.getElementById("refLinkBox");
+  const refClicksEl = document.getElementById("refClicks");
+  const refRegsEl = document.getElementById("refRegs");
+  const refBalanceEl = document.getElementById("refBalance");
+  const clicksBody = document.getElementById("clicksBody");
+  const regsBody = document.getElementById("regsBody");
+  const clicksEmpty = document.getElementById("clicksEmpty");
+  const regsEmpty = document.getElementById("regsEmpty");
+
+  function formatDT(ts){
+    try{
+      const d = new Date(ts);
+      return d.toLocaleString();
+    }catch{ return ""; }
+  }
+
+  
+    
+    function renderPartner() {
+      // Partner cabinet (no начисления): ссылка + статистика переходов/регистраций
+      const refLink = CryptoExAuth.buildMyRefLink();
+      const sum = CryptoExAuth.getMyRefSummary();
+
+      const refBox = document.getElementById("refLinkBox");
+      if (refBox) {
+        refBox.textContent = refLink;
+        refBox.title = refLink;
+      }
+
+      const hint = document.getElementById("refHint");
+      if (hint) {
+        hint.textContent = `Переходов: ${sum.clicksCount} · Регистраций: ${sum.regsCount}`;
+      }
+
+      const btnCopy = document.getElementById("copyRef");
+      if (btnCopy && !btnCopy.__bound) {
+        btnCopy.__bound = true;
+        btnCopy.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(refLink);
+            CryptoExAuth.toast("Ссылка скопирована", "success");
+          } catch (e) {
+            // fallback for file:// cases
+            const tmp = document.createElement("textarea");
+            tmp.value = refLink;
+            document.body.appendChild(tmp);
+            tmp.select();
+            document.execCommand("copy");
+            document.body.removeChild(tmp);
+            CryptoExAuth.toast("Ссылка скопирована", "success");
+          }
+        });
+      }
+
+      // Cards
+      const elClicks = document.getElementById("refClicks");
+      const elRegs = document.getElementById("refRegs");
+      const elBal = document.getElementById("refBalance");
+      if (elClicks) elClicks.textContent = String(sum.clicksCount);
+      if (elRegs) elRegs.textContent = String(sum.regsCount);
+      if (elBal) elBal.textContent = "0.00"; // начисления отключены
+
+      // Tables: clicks
+      const clicksBody = document.getElementById("clicksBody");
+      const clicksEmpty = document.getElementById("clicksEmpty");
+      if (clicksBody) {
+        clicksBody.innerHTML = "";
+        if (!sum.clicksRecent.length) {
+          if (clicksEmpty) clicksEmpty.style.display = "block";
+        } else {
+          if (clicksEmpty) clicksEmpty.style.display = "none";
+          sum.clicksRecent.forEach((c) => {
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            const when = c.when || "";
+            td1.textContent = when;
+            tr.appendChild(td1);
+            clicksBody.appendChild(tr);
+          });
+        }
+      }
+
+      // Tables: regs
+      const regsBody = document.getElementById("regsBody");
+      const regsEmpty = document.getElementById("regsEmpty");
+      if (regsBody) {
+        regsBody.innerHTML = "";
+        if (!sum.regsRecent.length) {
+          if (regsEmpty) regsEmpty.style.display = "block";
+        } else {
+          if (regsEmpty) regsEmpty.style.display = "none";
+          sum.regsRecent.forEach((r) => {
+            const tr = document.createElement("tr");
+            const td1 = document.createElement("td");
+            const when = r.when || "";
+            td1.textContent = when;
+            tr.appendChild(td1);
+            regsBody.appendChild(tr);
+          });
+        }
+      }
+    }
+function doLogout(){
+    CryptoExAuth.logout();
+    CryptoExAuth.toast("Вы вышли из аккаунта");
+    window.location.href = "./index.html";
+  }
+  document.getElementById("logoutRow").addEventListener("click", doLogout);
+
+  show("profile");
+});
+</script>
+
+  </div>
+</main>
+<!-- auth.js moved above -->
+</body>
+</html>
