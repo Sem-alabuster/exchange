@@ -31,7 +31,8 @@
     .hcell{padding:22px 26px;}
     .h-title{font-size:28px;font-weight:800;line-height:1.1;}
     .h-sub{color:var(--muted);font-size:13px;margin-top:6px}
-    .pair{display:flex;align-items:center;gap:10px}
+    .pair{display:none !important;}
+.pair{display:flex;align-items:center;gap:10px}
     .badge{width:28px;height:28px;border-radius:999px;background:#e8f5f4;color:var(--teal);display:flex;align-items:center;justify-content:center;font-weight:800}
     .pair .pname{font-weight:700}
     .pair .pamt{color:var(--muted);font-size:12px}
@@ -137,6 +138,7 @@
         <div class="body"><div class="mainbox" id="stateNew">
             <h1 class="mainh">Новая заявка</h1>
             <p class="maindesc">Переведите указанную в Вашей заявке сумму на предоставленные реквизиты.</p>
+            <div class="netLine">Сумма: <span id="amountLabel" class="coinName"></span></div>
             <div class="netLine">Монета: <span id="coinLabel" class="coinName"></span></div>
             <div class="netLine">Сеть перевода: <span id="networkLabel" class="network"></span></div>
             <div class="addrrow">
@@ -215,9 +217,62 @@
 
     function getDraft(){
       try{
+        // preferred key for request page
         const raw = localStorage.getItem('cryptoex_last_request');
-        if(!raw) return null;
-        return JSON.parse(raw);
+        if(raw) {
+          const d1 = JSON.parse(raw);
+          // If it is already in the request-page format (has give/get objects) — return as is.
+          if (d1 && typeof d1 === 'object' && d1.give && typeof d1.give === 'object') return d1;
+
+          // Otherwise, it's likely the "exchangeDraft" format stored from the main page.
+          const nowIso = new Date().toISOString();
+          const giveName = d1.coinName || d1.coin || '';
+          const unit = (d1.coin || '').replace(/\s*\(.*\)\s*/,'').trim();
+          const network = d1.network || (d1.coinName && /\(([^)]+)\)/.test(d1.coinName) ? RegExp.$1 : '');
+          const rate = Number(d1.rate) || 0;
+
+          return {
+            id: d1.requestId || d1.id || d1.rid || genId(),
+            createdAt: d1.createdAt || nowIso,
+            rateText: rate ? `Курс обмена: 1 ${unit || 'USDT'} = ${rate.toLocaleString('ru-RU',{maximumFractionDigits:8})} RUB` : '—',
+            give: {
+              name: giveName,
+              badge: (unit || 'T')[0],
+              amount: Number(d1.give ?? d1.amount ?? 0) || 0,
+              unit: unit || '',
+              code: d1.coin || ''
+            },
+            get: {
+              name: d1.bank || d1.getBank || '',
+              amount: Number(d1.get ?? 0) || 0,
+              unit: 'RUB',
+              code: ''
+            },
+            network: network || '',
+            address: d1.address || '',
+          };
+        }
+
+        // fallback: draft created on main page
+        const raw2 = localStorage.getItem('cryptoex_exchange_draft');
+        if(!raw2) return null;
+        const d2 = JSON.parse(raw2);
+
+        const nowIso = new Date().toISOString();
+        const giveName = d2.coinName || d2.coin || '';
+        const unit = (d2.coin || '').replace(/\s*\(.*\)\s*/,'').trim();
+        const network = d2.network || (d2.coinName && /\(([^)]+)\)/.test(d2.coinName) ? RegExp.$1 : '');
+        const rate = Number(d2.rate) || 0;
+
+        return {
+          id: d2.requestId || d2.id || genId(),
+          createdAt: d2.createdAt || nowIso,
+          rateText: rate ? `Курс обмена: 1 ${unit || 'USDT'} = ${rate.toLocaleString('ru-RU',{maximumFractionDigits:8})} RUB` : '—',
+          give: {name: giveName, badge: (unit||'T')[0], amount: d2.give || 0, unit: unit || '', code: d2.coin || ''},
+          get: {name: d2.bank || '', amount: d2.get || 0, unit: 'RUB', code: ''},
+          network: network || '',
+          address: d2.address || '',
+        };
       }catch(e){return null;}
     }
 
@@ -248,6 +303,17 @@
       document.getElementById('giveBadge').textContent = d.give?.badge || 'T';
       document.getElementById('giveName').textContent = d.give?.name || '';
       document.getElementById('giveAmt').textContent = `${d.give?.amount ?? 0} ${d.give?.unit || ''}`.trim();
+      // Amount / Coin labels in the "Новая заявка" block
+      const amountLabelEl = document.getElementById('amountLabel');
+      const coinLabelEl = document.getElementById('coinLabel');
+      if(amountLabelEl) amountLabelEl.textContent = `${d.give?.amount ?? 0} ${d.give?.unit || ''}`.trim();
+      if(coinLabelEl) {
+        // Prefer full coin name if present (e.g. "USDT (TRON)")
+        const full = (d.give?.name || '').trim();
+        const unit = (d.give?.unit || '').trim();
+        coinLabelEl.textContent = (full || unit || '');
+      }
+
 
       document.getElementById('getName').textContent = d.get?.name || '';
       document.getElementById('getAmt').textContent = `${d.get?.amount ?? 0} ${d.get?.unit || ''}`.trim();

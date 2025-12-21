@@ -311,12 +311,12 @@
           </div>
         </div>
 
-        <input class="field" placeholder="Номер карты*" />
-        <input class="field" placeholder="ФИО*" />
-        <input class="field" placeholder="Номер телефона СБП*" />
-        <input class="field" placeholder="E-mail*" />
-        <input class="field" placeholder="WhatsApp номер*" />
-        <input class="field" placeholder="Telegram" />
+        <input class="field" id="cardNumber" inputmode="numeric" autocomplete="cc-number" placeholder="Номер карты*" />
+        <input class="field" id="fullName" autocomplete="name" placeholder="ФИО*" />
+        <input class="field" id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+7 (___) ___-__-__" />
+        <input class="field" id="email" type="email" autocomplete="email" placeholder="E-mail*" />
+        <input class="field" id="whatsapp" type="tel" inputmode="tel" placeholder="WhatsApp номер*" />
+        <input class="field" id="telegram" placeholder="Telegram" />
 
         <label class="agree">
           <input type="checkbox" id="agreeChk" />
@@ -577,6 +577,74 @@ const banks = [
     // Start exchange -> create local draft and open the "request" page
     const startBtn = document.getElementById("startExchangeBtn");
     const agreeChk = document.getElementById("agreeChk");
+
+    // --- Validation for inputs in "3. Ввод данных" ---
+    const cardInput = document.getElementById("cardNumber");
+    const nameInput = document.getElementById("fullName");
+    const phoneInput = document.getElementById("phone");
+    const emailInput = document.getElementById("email");
+    const waInput = document.getElementById("whatsapp");
+    const tgInput = document.getElementById("telegram");
+
+    function normalizePhone(v) {
+      let s = String(v || "");
+      // keep + and digits only
+      s = s.replace(/[^0-9+]/g, "");
+      // only one leading +
+      s = s.replace(/(?!^)\+/g, "");
+      if (!s) return "";
+      if (s[0] !== "+") s = "+" + s;
+      // replace +8 with +7
+      s = s.replace(/^\+8/, "+7");
+      // if user pasted 7XXXXXXXXXX -> +7...
+      s = s.replace(/^\+7?7/, "+7");
+      if (s === "+") return "+7";
+      return s;
+    }
+
+    function isPhoneValid(v) {
+      const d = normalizePhone(v).replace(/\D/g, "");
+      return d.length === 11 && d.startsWith("7");
+    }
+
+    function isEmailValid(v) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(v || "").trim());
+    }
+
+    function isFormFilled() {
+      if (!cardInput || !nameInput || !phoneInput || !emailInput || !waInput) return false;
+      if (!cardInput.value.trim()) return false;
+      if (!nameInput.value.trim()) return false;
+      if (!phoneInput.value.trim() || !isPhoneValid(phoneInput.value)) return false;
+      if (!emailInput.value.trim() || !isEmailValid(emailInput.value)) return false;
+      if (!waInput.value.trim()) return false;
+      return true;
+    }
+
+    function updateStartBtnState() {
+      const give = Number(String(giveAmountEl.value || "").replace(",", ".")) || 0;
+      const rubAmount = Math.round(give * (selectedCoin ? selectedCoin.rate : 0));
+      const ok = agreeChk.checked && isFormFilled() && rubAmount >= MIN_RUB && !!selectedCoin && !!selectedBank;
+      if (startBtn) startBtn.disabled = !ok;
+    }
+
+    // Phone UX: always start with +7
+    if (phoneInput) {
+      phoneInput.addEventListener("focus", () => {
+        if (!phoneInput.value.trim()) phoneInput.value = "+7";
+      });
+      phoneInput.addEventListener("input", () => {
+        phoneInput.value = normalizePhone(phoneInput.value);
+        updateStartBtnState();
+      });
+    }
+
+    [cardInput, nameInput, emailInput, waInput, tgInput, agreeChk, giveAmountEl].forEach((el) => {
+      if (!el) return;
+      el.addEventListener("input", updateStartBtnState);
+      el.addEventListener("change", updateStartBtnState);
+    });
+
 
     // Делаем функцию доступной и для inline onclick
     window.startExchange = function startExchange() {
