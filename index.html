@@ -231,12 +231,7 @@
         <div class="section-title">Выберите криптовалюту</div>
         <div class="list" id="giveList"></div>
 
-        <div class="swap-bubble" title="Обмен">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M7 7h12l-2.5-2.5" stroke="#0a8f8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M17 17H5l2.5 2.5" stroke="#0a8f8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
+
       </div>
 
       <div class="card">
@@ -356,13 +351,7 @@
     </footer>
   </main>
 
-  <div class="support" aria-label="Онлайн-поддержка">
-    <div class="support-top">
-      <div class="support-switch" aria-hidden="true"></div>
-      <div class="support-title">Онлайн-поддержка</div>
-      <div class="support-brand"><small>CryptoEx</small></div>
-    </div>
-  </div>
+  <!-- Панель "Онлайн-поддержка" убрана по запросу -->
 
   <script>
       const MIN_RUB = 30000;
@@ -381,25 +370,25 @@
 ];
 
 const banks = [
-      { name:"Сбербанк", icoText:"✓", icoBg:"#2bbf64", code:"RUB" },
-      { name:"Т-Банк", icoText:"T", icoBg:"#f0c400", icoLight:true, code:"RUB" },
-      { name:"Райффайзен", icoText:"R", icoBg:"#ffd400", icoLight:true, code:"RUB" },
-      { name:"СБП", icoText:"P", icoBg:"#ffffff", icoLight:true, code:"RUB", border:true },
-      { name:"ВТБ24", icoText:"В", icoBg:"#1f8cff", code:"RUB" },
-      { name:"Альфа-банк", icoText:"A", icoBg:"#ff4b4b", code:"RUB" },
-      { name:"Открытие", icoText:"O", icoBg:"#38bdf8", code:"RUB" },
+      { id:'sber', name:"Сбербанк", code:"RUB", icon:"assets/banks/sber.svg" },
+      { id:'tbank', name:"Т-Банк", code:"RUB", icon:"assets/banks/tbank.svg" },
+      { id:'raif', name:"Райффайзен", code:"RUB", icon:"assets/banks/raif.svg" },
+      { id:'sbp', name:"СБП", code:"RUB", icon:"assets/banks/sbp.svg" },
+      { id:'vtb', name:"ВТБ24", code:"RUB", icon:"assets/banks/vtb.svg" },
+      { id:'alfa', name:"Альфа-банк", code:"RUB", icon:"assets/banks/alfa.svg" },
+      { id:'otkrytie', name:"Открытие", code:"RUB", icon:"assets/banks/otkrytie.svg" },
 
-      { name:"Карта Мир", icoText:"МИР", icoBg:"#10b981", icoLight:true, code:"RUB" },
-      { name:"Росбанк", icoText:"p", icoBg:"#1d4ed8", code:"RUB" },
-      { name:"Почта Банк", icoText:"П", icoBg:"#ef4444", code:"RUB" },
-      { name:"Русский Стандарт", icoText:"РС", icoBg:"#111827", code:"RUB" },
-      { name:"Промсвязьбанк", icoText:"ПС", icoBg:"#f97316", code:"RUB" },
-      { name:"Банк Авангард", icoText:"A", icoBg:"#16a34a", code:"RUB" },
-      { name:"Россельхозбанк", icoText:"Р", icoBg:"#166534", code:"RUB" },
-      { name:"РНКБ", icoText:"Р", icoBg:"#06b6d4", code:"RUB" },
-      { name:"Банк Хоум Кредит", icoText:"H", icoBg:"#f43f5e", code:"RUB" },
-      { name:"Газпромбанк", icoText:"Г", icoBg:"#2563eb", code:"RUB" },
-      { name:"МТС Банк", icoText:"М", icoBg:"#ef4444", code:"RUB" }
+      { id:'mir', name:"Карта Мир", code:"RUB", icon:"assets/banks/mir.svg" },
+      { id:'rosbank', name:"Росбанк", code:"RUB", icon:"assets/banks/rosbank.svg" },
+      { id:'pochtabank', name:"Почта Банк", code:"RUB", icon:"assets/banks/pochtabank.svg" },
+      { id:'rs', name:"Русский Стандарт", code:"RUB", icon:"assets/banks/rs.svg" },
+      { id:'psb', name:"Промсвязьбанк", code:"RUB", icon:"assets/banks/psb.svg" },
+      { id:'avangard', name:"Банк Авангард", code:"RUB", icon:"assets/banks/avangard.svg" },
+      { id:'rshb', name:"Россельхозбанк", code:"RUB", icon:"assets/banks/rshb.svg" },
+      { id:'rnkb', name:"РНКБ", code:"RUB", icon:"assets/banks/rnkb.svg" },
+      { id:'home', name:"Банк Хоум Кредит", code:"RUB", icon:"assets/banks/home.svg" },
+      { id:'gazprom', name:"Газпромбанк", code:"RUB", icon:"assets/banks/gazprom.svg" },
+      { id:'mts', name:"МТС Банк", code:"RUB", icon:"assets/banks/mts.svg" }
     ];
 
     let selectedCoin = coins[0];
@@ -462,8 +451,13 @@ const banks = [
     function setCoin(coin){
       selectedCoin = coin;
       giveNameEl.textContent = coin.name;
-      giveIcoEl.textContent = coin.icoText;
-      giveIcoEl.style.background = coin.icoBg;
+      if (coin.icon) {
+        giveIcoEl.style.background = 'transparent';
+        giveIcoEl.innerHTML = `<img class="coin-ico-img" src="${coin.icon}" alt="${coin.name}">`;
+      } else {
+        giveIcoEl.textContent = coin.icoText;
+        giveIcoEl.style.background = coin.icoBg;
+      }
       giveCodeEl.textContent = coin.code;
       giveCode2El.textContent = coin.code;
       document.getElementById("rateLine").textContent = selectedCoin ? `Курс обмена: 1 ${selectedCoin.ticker} = ${selectedCoin.rate} RUB` : `Курс обмена: —`;
@@ -474,10 +468,16 @@ const banks = [
     function setBank(bank){
       selectedBank = bank;
       getNameEl.textContent = bank.name;
-      getIcoEl.textContent = bank.icoText;
-      getIcoEl.style.background = bank.icoBg;
-      getIcoEl.style.color = bank.icoLight ? "#2b3a42" : "#fff";
-      getIcoEl.style.border = bank.border ? "2px solid #1a1a1a" : "none";
+      if (bank.icon) {
+        getIcoEl.style.background = 'transparent';
+        getIcoEl.style.border = 'none';
+        getIcoEl.innerHTML = `<img class="coin-ico-img" src="${bank.icon}" alt="${bank.name}">`;
+      } else {
+        getIcoEl.textContent = bank.icoText;
+        getIcoEl.style.background = bank.icoBg;
+        getIcoEl.style.color = bank.icoLight ? "#2b3a42" : "#fff";
+        getIcoEl.style.border = bank.border ? "2px solid #1a1a1a" : "none";
+      }
       syncAmounts();
       renderBanks();
     }
