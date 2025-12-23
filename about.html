@@ -50,8 +50,8 @@
     .why h3{font-size:32px;margin:0 0 18px;letter-spacing:-.2px}
     .why-row{position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;gap:34px;padding-top:16px}
     @media(max-width:980px){.why-row{grid-template-columns:1fr;gap:16px}}
-    .why-row::before{content:"";position:absolute;left:40px;right:40px;top:54px;height:2px;background:#cfe7e5}
-    @media(max-width:980px){.why-row::before{display:none}}
+    /* Убрана декоративная линия (по запросу) */
+    .why-row::before{display:none}
     .why-item{position:relative;padding-top:6px}
     .why-item .dotc{position:absolute;left:0;top:42px;width:12px;height:12px;border-radius:50%;background:#bfe9e6}
     @media(max-width:980px){.why-item .dotc{display:none}}

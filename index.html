@@ -207,7 +207,7 @@
           <span>Введите сумму</span>
           <span class="right">≈ <b id="previewRub">0</b> RUB</span>
         </div>
-        <div class="min-warn" id="minWarn" style="display:none; margin-top:8px; color:#d32f2f; font-size:12px;">Минимальная сумма сделки — 30 000 RUB</div>
+        <div class="min-warn" id="minWarn" style="display:none; margin-top:8px; color:#d32f2f; font-size:12px;">Минимальная сумма сделки — 15 000 RUB</div>
 
         <!-- Отдаёте: убраны Банки/Наличные -->
         <div class="tabs">
@@ -354,7 +354,7 @@
   <!-- Панель "Онлайн-поддержка" убрана по запросу -->
 
   <script>
-      const MIN_RUB = 30000;
+      const MIN_RUB = 15000;
 
     const coins = [
   {id: "btc", name: "Bitcoin", ticker: "BTC", network: "bitcoin", address: "bc1q8kt8gqxan8caluvqrf386r97p98egs5236gsdx", rate: 6900646.8961764, icon: "assets/coins/btc.png"},
@@ -370,25 +370,25 @@
 ];
 
 const banks = [
-      { id:'sber', name:"Сбербанк", code:"RUB", icon:"assets/banks/sber.svg" },
-      { id:'tbank', name:"Т-Банк", code:"RUB", icon:"assets/banks/tbank.svg" },
-      { id:'raif', name:"Райффайзен", code:"RUB", icon:"assets/banks/raif.svg" },
-      { id:'sbp', name:"СБП", code:"RUB", icon:"assets/banks/sbp.svg" },
-      { id:'vtb', name:"ВТБ24", code:"RUB", icon:"assets/banks/vtb.svg" },
-      { id:'alfa', name:"Альфа-банк", code:"RUB", icon:"assets/banks/alfa.svg" },
-      { id:'otkrytie', name:"Открытие", code:"RUB", icon:"assets/banks/otkrytie.svg" },
+      { id:'sber', name:"Сбербанк", code:"RUB", icon:"assets/banks/sber.png" },
+      { id:'tbank', name:"Т-Банк", code:"RUB", icon:"assets/banks/tbank.png" },
+      { id:'raif', name:"Райффайзен", code:"RUB", icon:"assets/banks/raif.png" },
+      { id:'sbp', name:"СБП", code:"RUB", icon:"assets/banks/sbp.png" },
+      { id:'vtb', name:"ВТБ", code:"RUB", icon:"assets/banks/vtb.png" },
+      { id:'alfa', name:"Альфа-банк", code:"RUB", icon:"assets/banks/alfa.png" },
+      { id:'otkrytie', name:"Открытие", code:"RUB", icon:"assets/banks/otkrytie.png" },
 
-      { id:'mir', name:"Карта Мир", code:"RUB", icon:"assets/banks/mir.svg" },
-      { id:'rosbank', name:"Росбанк", code:"RUB", icon:"assets/banks/rosbank.svg" },
-      { id:'pochtabank', name:"Почта Банк", code:"RUB", icon:"assets/banks/pochtabank.svg" },
-      { id:'rs', name:"Русский Стандарт", code:"RUB", icon:"assets/banks/rs.svg" },
-      { id:'psb', name:"Промсвязьбанк", code:"RUB", icon:"assets/banks/psb.svg" },
-      { id:'avangard', name:"Банк Авангард", code:"RUB", icon:"assets/banks/avangard.svg" },
-      { id:'rshb', name:"Россельхозбанк", code:"RUB", icon:"assets/banks/rshb.svg" },
-      { id:'rnkb', name:"РНКБ", code:"RUB", icon:"assets/banks/rnkb.svg" },
-      { id:'home', name:"Банк Хоум Кредит", code:"RUB", icon:"assets/banks/home.svg" },
-      { id:'gazprom', name:"Газпромбанк", code:"RUB", icon:"assets/banks/gazprom.svg" },
-      { id:'mts', name:"МТС Банк", code:"RUB", icon:"assets/banks/mts.svg" }
+      { id:'mir', name:"Карта Мир", code:"RUB", icon:"assets/banks/mir.png" },
+      { id:'rosbank', name:"Росбанк", code:"RUB", icon:"assets/banks/rosbank.png" },
+      { id:'pochtabank', name:"Почта Банк", code:"RUB", icon:"assets/banks/pochtabank.png" },
+      { id:'rs', name:"Русский Стандарт", code:"RUB", icon:"assets/banks/rs.png" },
+      { id:'psb', name:"Промсвязьбанк", code:"RUB", icon:"assets/banks/psb.png" },
+      { id:'avangard', name:"Банк Авангард", code:"RUB", icon:"assets/banks/avangard.png" },
+      { id:'rshb', name:"Россельхозбанк", code:"RUB", icon:"assets/banks/rshb.png" },
+      { id:'rnkb', name:"РНКБ", code:"RUB", icon:"assets/banks/rnkb.png" },
+      { id:'home', name:"Банк Хоум Кредит", code:"RUB", icon:"assets/banks/home.png" },
+      { id:'gazprom', name:"Газпромбанк", code:"RUB", icon:"assets/banks/gazprom.png" },
+      { id:'mts', name:"МТС Банк", code:"RUB", icon:"assets/banks/mts.png" }
     ];
 
     let selectedCoin = coins[0];
@@ -458,8 +458,8 @@ const banks = [
         giveIcoEl.textContent = coin.icoText;
         giveIcoEl.style.background = coin.icoBg;
       }
-      giveCodeEl.textContent = coin.code;
-      giveCode2El.textContent = coin.code;
+      giveCodeEl.textContent = coin.ticker;
+      giveCode2El.textContent = coin.ticker;
       document.getElementById("rateLine").textContent = selectedCoin ? `Курс обмена: 1 ${selectedCoin.ticker} = ${selectedCoin.rate} RUB` : `Курс обмена: —`;
       syncAmounts();
 
@@ -527,7 +527,7 @@ const banks = [
         return true;
       });
       filtered.forEach(b => {
-        const item = createItem({name:b.name, icoText:b.icoText, icoBg:b.icoBg, icoLight:!!b.icoLight, code:b.code, border:!!b.border},
+        const item = createItem({name:b.name, icon:b.icon, icoText:b.icoText, icoBg:b.icoBg, icoLight:!!b.icoLight, code:b.code, border:!!b.border},
                                 b.name === selectedBank.name, true);
         item.addEventListener("click", () => setBank(b));
         getListEl.appendChild(item);
@@ -669,7 +669,7 @@ const banks = [
       const exchangeDraft = {
         rid,
         createdAt: new Date().toISOString(),
-        coin: selectedCoin.symbol,
+        coin: selectedCoin.ticker,
         coinName: selectedCoin.name,
         network: selectedCoin.network,
         address: selectedCoin.address,

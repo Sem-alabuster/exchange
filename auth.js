@@ -182,7 +182,7 @@
     const u = users.find(x => x.email.toLowerCase() === email.toLowerCase());
     if (u && !u.refCode) {
       u.refCode = generateRefCode();
-      saveUsers(users);
+      setUsers(users);
     }
     return u ? { email: u.email, refCode: u.refCode || "" } : null;
   }
@@ -368,7 +368,7 @@
 
     if (!code) {
       // If user record is missing in the users list (old data), create/update it
-      const refCode = genRefCode();
+      const refCode = generateRefCode();
       const existing = users.find(u => u.email === user.email);
       if (existing) {
         existing.refCode = existing.refCode || refCode;
@@ -377,11 +377,12 @@
         users.push({ ...user, refCode });
         code = refCode;
       }
-      saveUsers(users);
+      setUsers(users);
     }
 
     const updated = users.find(u => u.email === user.email);
-    if (updated) setCurrentUser(updated);
+    // Keep session in sync (store current email)
+    if (updated) setSessionEmail(updated.email);
     return code || "";
   }
 

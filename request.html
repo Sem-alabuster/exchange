@@ -38,6 +38,24 @@
     .pair .pamt{color:var(--muted);font-size:12px}
     .rightmeta{text-align:right;color:var(--muted);font-size:13px}
 
+    /* timer */
+    .timer{margin-top:10px;display:inline-flex;align-items:center;gap:10px;padding:10px 14px;border-radius:999px;
+      border:1px solid #d6e6e7;background:linear-gradient(90deg, rgba(15,143,138,.12), rgba(170,120,255,.12));
+      color:#0b1b20;font-weight:900;font-size:14px;}
+    .timer .tlabel{font-weight:800;opacity:.8}
+    .timer .tval{font-variant-numeric:tabular-nums;letter-spacing:.5px}
+    .timer.expired{background:rgba(213,74,74,.08);border-color:rgba(213,74,74,.35)}
+    .timer.expired .tval{color:#d54a4a}
+
+    /* info panel */
+    .infoPanel{margin:14px 0 14px;border:1px solid #d6e6e7;border-radius:18px;
+      background:linear-gradient(135deg, rgba(15,143,138,.12), rgba(170,120,255,.10));
+      padding:14px 14px;}
+    .infoRow{display:flex;justify-content:space-between;gap:14px;padding:8px 6px;border-radius:12px}
+    .infoRow + .infoRow{border-top:1px solid rgba(214,230,231,.7)}
+    .infoKey{color:#314750;font-size:13px;font-weight:800}
+    .infoVal{font-size:13px;font-weight:900;color:#0b1b20;text-align:right}
+
     .body{display:grid;grid-template-columns:1fr;gap:28px;align-items:start;justify-items:center;}
     .qrbox{background:#fff;border:1px solid var(--border);border-radius:18px;padding:16px;}
     .qrtitle{font-weight:700;margin-bottom:10px}
@@ -82,6 +100,9 @@
       .body{display:grid;grid-template-columns:1fr;gap:28px;align-items:start;justify-items:center;}
     .network{color:#d32f2f;font-weight:700;}
 
+      .infoRow{flex-direction:column;align-items:flex-start}
+      .infoVal{text-align:left}
+
   </style>
 </head>
 <body>
@@ -112,6 +133,10 @@
           <div class="hcell">
             <div class="h-title" id="reqTitle">Заявка #G00000</div>
             <div class="h-sub" id="reqTime">Время создания: —</div>
+            <div class="timer" id="payTimer" aria-live="polite">
+              <span class="tlabel">До конца оплаты:</span>
+              <span class="tval" id="payTimerVal">15:00</span>
+            </div>
           </div>
           <div class="hcell">
             <div class="pair">
@@ -138,9 +163,20 @@
         <div class="body"><div class="mainbox" id="stateNew">
             <h1 class="mainh">Новая заявка</h1>
             <p class="maindesc">Переведите указанную в Вашей заявке сумму на предоставленные реквизиты.</p>
-            <div class="netLine">Сумма: <span id="amountLabel" class="coinName"></span></div>
-            <div class="netLine">Монета: <span id="coinLabel" class="coinName"></span></div>
-            <div class="netLine">Сеть перевода: <span id="networkLabel" class="network"></span></div>
+            <div class="infoPanel" role="group" aria-label="Детали перевода">
+              <div class="infoRow">
+                <div class="infoKey">Сумма</div>
+                <div class="infoVal"><span id="amountLabel" class="coinName"></span></div>
+              </div>
+              <div class="infoRow">
+                <div class="infoKey">Монета</div>
+                <div class="infoVal"><span id="coinLabel" class="coinName"></span></div>
+              </div>
+              <div class="infoRow">
+                <div class="infoKey">Сеть перевода</div>
+                <div class="infoVal"><span id="networkLabel" class="network"></span></div>
+              </div>
+            </div>
             <div class="addrrow">
               <input class="input" id="walletAddr" readonly value="" />
               <button class="copybtn" id="copyAddr">Скопировать</button>
@@ -328,8 +364,61 @@
       if(netEl) netEl.textContent = net;
     }
 
+    function fmtMMSS(totalSec){
+      const m = Math.max(0, Math.floor(totalSec/60));
+      const s = Math.max(0, totalSec%60);
+      return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    }
+
+    function startPaymentTimer(createdAtIso){
+      const timerEl = document.getElementById('payTimer');
+      const valEl = document.getElementById('payTimerVal');
+      if(!timerEl || !valEl) return;
+
+      let created = new Date(createdAtIso || Date.now());
+      if(Number.isNaN(created.getTime())) created = new Date();
+      const deadline = created.getTime() + 15*60*1000;
+
+      const paidBtn = document.getElementById('paidBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+
+      const tick = () => {
+        const now = Date.now();
+        const remainMs = deadline - now;
+        const remainSec = Math.ceil(remainMs/1000);
+        if(remainSec <= 0){
+          valEl.textContent = '00:00';
+          timerEl.classList.add('expired');
+          if(paidBtn) paidBtn.disabled = true;
+          if(cancelBtn) cancelBtn.disabled = true;
+          if(paidBtn) paidBtn.style.opacity = '.55';
+          if(cancelBtn) cancelBtn.style.opacity = '.55';
+
+          const note = document.getElementById('bottomNote');
+          if(note && !note.dataset.expired){
+            note.dataset.expired = '1';
+            const msg = document.createElement('div');
+            msg.style.marginBottom = '10px';
+            msg.innerHTML = '<span class="warn">Время вышло.</span> Эта заявка больше не актуальна. Создайте новую заявку на главной странице.';
+            note.prepend(msg);
+          }
+          return false;
+        }
+        valEl.textContent = fmtMMSS(remainSec);
+        return true;
+      };
+
+      // initial + interval
+      tick();
+      const id = setInterval(() => {
+        const ok = tick();
+        if(!ok) clearInterval(id);
+      }, 1000);
+    }
+
     const draft = ensureDraft();
     setUI(draft);
+    startPaymentTimer(draft.createdAt);
 
     // copy
     document.getElementById('copyAddr').addEventListener('click', async () => {
